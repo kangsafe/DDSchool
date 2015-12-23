@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="fragment_school_titles">
+        <item>签到信息</item>
+        <item>通知</item>
+        <item>通讯录</item>
+        <item>小纸条</item>
+        <item>浏览器demo</item>
+        <item>共享</item>
+        <item>兴趣圈</item>
+        <item>班级圈</item>
+        <item>学校圈</item>
+        <item>同城圈</item>
+        <item>系统内核测试</item>
+        <item>工具字典</item>
+        <item>作业本</item>
+        <item>神秘功能</item>
+        <item>敬请期待</item>
+    </string-array>
+</resources>

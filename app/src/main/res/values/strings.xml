@@ -1,0 +1,85 @@
+<resources>
+    <string name="app_name">校园概念版</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="array_left_menu">
+        <item>个人中心</item>
+        <item>设置</item>
+        <item>你好</item>
+    </string-array>
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <string-array name="item_title">
+        <item>首页</item>
+        <item>发现</item>
+        <item>关注</item>
+        <item>收藏</item>
+        <item>草稿</item>
+        <item>搜索</item>
+        <item>提问</item>
+        <item>设置</item>
+    </string-array>
+    <!-- 顶部actionbar -->
+    <string name="msg_load_ing">加载中....</string>
+    <string name="app_cancle">取消</string>
+    <string name="app_change_user">注销用户</string>
+    <string name="app_exit_user">退出</string>
+    <string name="control">管理</string>
+    <string name="group">分组</string>
+    <string name="all">全部</string>
+    <string name="cnews">消息</string>
+    <string name="call">通话</string>
+    <string name="tv_phone">通讯录</string>
+    <string name="tv_group">群组</string>
+    <string name="tv_discuss">讨论组</string>
+    <string name="tv_life">生活服务</string>
+    <string name="tv_loading">正加载,请稍后...</string>
+    <string name="friend_group">好友分组</string>
+    <string name="device">我的设备</string>
+    <string name="group_count">1/2</string>
+
+    <!-- Refresh -->
+    <string name="p2refresh_head_load_more">加载更多</string>
+    <string name="p2refresh_end_load_more">更    多</string>
+    <string name="p2refresh_end_click_load_more">点击加载</string>
+    <string name="p2refresh_release_refresh">松开立即刷新</string>
+    <string name="p2refresh_pull_to_refresh">下拉刷新</string>
+    <string name="p2refresh_doing_head_refresh">正在刷新&#8230;</string>
+    <string name="p2refresh_doing_end_refresh">加载中&#8230;</string>
+    <string name="p2refresh_refresh_lasttime">最近更新&#160;&#058;&#160;</string>
+
+    <string name="user_name">开心一刻</string>
+    <string name="user_feel">好好学习,天天向上</string>
+    <string name="user_time">12:30</string>
+    <string name="tv_newfriend">新朋友</string>
+    <string name="tv_tongxunlu">通讯录</string>
+    <string name="tv_friend">QQ好友</string>
+
+    <string name="recentchat">最近聊天</string>
+    <string name="choose_constact">选择联系人</string>
+    <string name="search">请输入关键字</string>
+    <string name="dynamic">动态</string>
+    <string name="mime">我</string>
+    <string name="no_data">网络异常...</string>
+    <string name="tv_search">搜索</string>
+    <string name="tv_call1">你通话过的联系人都会在这里出现</string>
+    <string name="tv_call2">快和朋友开始语音通话吧</string>
+    <string name="btn_call">找人聊聊</string>
+    <string name="wifi_state">WLAN 状态</string>
+    <string name="instruction_pre">启动服务，可以从电脑远程管理手机文件</string>
+    <string name="instruction">请在"我的电脑"地址栏输入:</string>
+    <string name="notif_server_starting">远程管理已开启</string>
+    <string name="notif_title">远程管理</string>
+    <string name="no_wifi_hint">没有WLAN网络，请检查WLAN设置</string>
+    <string name="start_server">开启服务</string>
+    <string name="stop_server">停止服务</string>
+    <string name="no_wifi">没有WLAN网络</string>
+    <string name="storage_warning">没有外部存储设备或SD卡不可用</string>
+    <string name="wifi">文件管理</string>
+</resources>

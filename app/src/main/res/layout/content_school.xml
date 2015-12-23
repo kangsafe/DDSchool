@@ -1,0 +1,25 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 主题图片 -->
+    <com.ddschool.lib.view.slideshow.customview.SlideShowView
+        android:id="@+id/slideshowView"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true" />
+
+    <GridView
+        android:id="@+id/item_grid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/slideshowView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="1dp"
+        android:background="#ebebeb"
+        android:gravity="center_horizontal"
+        android:horizontalSpacing="1dp"
+        android:numColumns="4"
+        android:paddingTop="1dp"
+        android:verticalSpacing="1dp" />
+</RelativeLayout>
