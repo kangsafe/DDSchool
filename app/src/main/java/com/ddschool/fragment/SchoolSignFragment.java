@@ -1,6 +1,8 @@
 package com.ddschool.fragment;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +17,7 @@ import android.widget.SimpleAdapter;
 import com.ddschool.R;
 import com.ddschool.utils.HttpHelper;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +41,7 @@ public class SchoolSignFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private final String TAG = "SchoolSignFragment";
 
     public SchoolSignFragment() {
         // Required empty public constructor
@@ -68,16 +72,25 @@ public class SchoolSignFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("grant_type", "client_credential");
-        map.put("appid", "AOQHAKjBwcQA");
-        map.put("appsecret", "XxK9mWcqjEWnWy48/0tDRg");
+
+        Map<String, String> map = new HashMap<>();
         String str = "";
-        for (String key : map.keySet()
-                ) {
-            str += key + "=" + map.get(key) + "&";
+        try {
+            ApplicationInfo appInfo = getContext().getPackageManager().getApplicationInfo(getContext().getPackageName(),
+                    PackageManager.GET_META_DATA);
+            Log.i("TAG", appInfo.metaData.getString("DDSchool_AppId"));
+            map.put("grant_type", "client_credential");
+            map.put("appid", appInfo.metaData.getString("DDSchool_AppId"));
+            map.put("appsecret", appInfo.metaData.getString("DDSchool_AppSecret"));
+            for (String key : map.keySet()
+                    ) {
+                str += key + "=" + map.get(key) + "&";
+            }
+            str = str.substring(0, str.length() - 1);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
-        str = str.substring(0, str.length() - 1);
+        Log.i(TAG, str);
 //        com.ddschool.net.HttpHelper.AysnPostHtml("http://schoolapi2.wo-ish.com", str, new HttpConnProp(), "utf-8", new com.ddschool.net.HttpHelper.AsynExecuteCallBack() {
 //            @Override
 //            public void beforeExecute() {
@@ -96,7 +109,13 @@ public class SchoolSignFragment extends Fragment {
 //        });
 //        com.ddschool.net.HttpHelper.shutTheThreadPoolDown();
         HttpHelper httpHelper = new HttpHelper();
-        httpHelper.getHtmlByThread("http://schoolapi2.wo-ish.com", str, true, "utf-8", handler, 0);
+        byte[] b = str.getBytes();
+        try {
+            str = new String(b, "UTF-8");//new String(str.getBytes(),"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        httpHelper.getHtmlByThread("http://schoolapi2.wo-ish.com/OAuth/token", str, true, "utf-8", handler, 0);
     }
 
     private Handler handler = new Handler() {
@@ -104,6 +123,7 @@ public class SchoolSignFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             Log.d("MyHandler", "handleMessage......");
+            Log.i("TAG", msg.obj.toString());
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0:
