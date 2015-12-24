@@ -19,7 +19,7 @@ public class WelcomeActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		AccessToken.getAccessToken();
+
 
 		// 使得音量键控制媒体声音
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -29,6 +29,7 @@ public class WelcomeActivity extends Activity {
 		TimerTask task = new TimerTask() {
 			@Override
 			public void run() {
+				AccessToken.getAccessToken();
 				Intent mainIntent = new Intent().setClass(WelcomeActivity.this,
 						LoginActivity.class);
 
