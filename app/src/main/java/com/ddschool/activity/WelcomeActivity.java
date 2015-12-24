@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Window;
 
 import com.ddschool.R;
+import com.ddschool.tools.AccessToken;
 
 public class WelcomeActivity extends Activity {
 	private long mSplashDelay = 2000;
@@ -18,11 +19,13 @@ public class WelcomeActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		AccessToken.getAccessToken();
+
 		// 使得音量键控制媒体声音
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_welcome);
-		
+
 		TimerTask task = new TimerTask() {
 			@Override
 			public void run() {
@@ -41,6 +44,5 @@ public class WelcomeActivity extends Activity {
 		Timer timer = new Timer();
 
 		timer.schedule(task, mSplashDelay);
-		
 	}
 }
