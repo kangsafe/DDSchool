@@ -1,6 +1,8 @@
 package com.ddschool.bean;
 
-public class BwResult {
+import java.io.Serializable;
+
+public class BwResult implements Serializable {
     private int errcode;
     private String errmsg;
 
