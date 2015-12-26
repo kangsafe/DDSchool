@@ -14,8 +14,8 @@ import com.ddschool.R;
 import com.ddschool.bean.BwConst;
 import com.ddschool.bean.BwToken;
 import com.ddschool.bean.UserToken;
-import com.ddschool.net.HttpUtil;
-import com.ddschool.net.ThreadPoolUtils;
+import com.frame.common.HttpUtil;
+import com.frame.common.ThreadPoolUtils;
 import com.google.gson.Gson;
 
 import org.apache.http.NameValuePair;
@@ -36,25 +36,6 @@ public class WelcomeActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_welcome);
         ThreadPoolUtils.execute(new TokenRunnable());
-//		TimerTask task = new TimerTask() {
-//			@Override
-//			public void run() {
-//				//AccessToken.getAccessToken();
-//				Intent mainIntent = new Intent().setClass(WelcomeActivity.this,
-//						LoginActivity.class);
-//
-//				startActivity(mainIntent);
-//
-//				finish();
-//
-//				overridePendingTransition(android.R.anim.fade_in,
-//						android.R.anim.fade_out);
-//			}
-//		};
-//
-//		Timer timer = new Timer();
-//
-//		timer.schedule(task, mSplashDelay);
     }
 
     private Handler handler = new Handler() {
@@ -100,7 +81,7 @@ public class WelcomeActivity extends Activity {
                 list.add(new BasicNameValuePair("grant_type",
                         "client_credential"));
                 Log.i("请求参数", list.toString());
-                String json = HttpUtil.sendPostRequest("oauth/token", list);
+                String json = HttpUtil.sendPostRequest("http://schoolapi2.wo-ish.com/oauth/token", list);
                 Message msg = Message.obtain();
                 msg.what = What_Token;
                 msg.obj = json;

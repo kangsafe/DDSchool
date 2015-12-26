@@ -79,7 +79,6 @@ public class SchoolFragment extends Fragment {
                     HashMap<String, String> item = (HashMap<String, String>) gridView.getItemAtPosition(position);
 
                     String current_title = item.get("title");
-                    Intent intent = null;
                     switch (position) {
                         case 0://签到信息:
                             FragmentTransaction ft = getFragmentManager().beginTransaction();
