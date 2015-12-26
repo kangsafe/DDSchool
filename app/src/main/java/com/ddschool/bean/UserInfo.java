@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2015/12/26.
  */
-public class UserInfo extends BaseUserInfo {
+public class UserInfo extends BwResult {
     private UserInfoData data;
 
     public UserInfoData getData() {
@@ -16,7 +16,7 @@ public class UserInfo extends BaseUserInfo {
         this.data = data;
     }
 
-    private class UserInfoData{
+    private class UserInfoData extends BaseUserInfo{
 
         private List<UserRole> roles;
         private List<UserClass> classes;

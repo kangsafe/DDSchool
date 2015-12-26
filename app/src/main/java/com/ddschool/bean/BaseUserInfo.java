@@ -3,7 +3,7 @@ package com.ddschool.bean;
 /**
  * Created by kangsafe on 2015/12/26.
  */
-public class BaseUserInfo extends BwResult {
+public class BaseUserInfo{
     private String userid;
     private String sname;
     private String sid;

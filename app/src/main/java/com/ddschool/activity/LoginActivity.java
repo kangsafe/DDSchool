@@ -12,6 +12,8 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -45,7 +47,8 @@ import java.util.List;
 
 public class LoginActivity extends Activity implements OnClickListener {
     private SharedPreferences mySharedPreferences;
-
+    private final int What_Login = 0x01;
+    private final int What_Reg = 0x02;
     private EditText mUserNameEditText; // 帐号编辑框
     private EditText mPasswordEditText; // 密码编辑框
 
@@ -141,6 +144,26 @@ public class LoginActivity extends Activity implements OnClickListener {
 //				});
     }
 
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            Gson g = new Gson();
+            Log.i("What", "what=" + msg.what + ",json=" + msg.obj);
+            switch (msg.what) {
+                case What_Login:
+                    UserInfo info = (UserInfo) msg.obj;
+                    if (info.getErrcode() == 0) {
+                        Log.d("Token", info.toString());
+                        updateStatus(SUCCESS);
+                    } else {
+                        updateStatus(FAILURE);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     private void updateStatus(int status) {
         mLoginBtn.setEnabled(true);
@@ -213,17 +236,11 @@ public class LoginActivity extends Activity implements OnClickListener {
                 String json = HttpUtil.sendPostRequest("http://schoolapi2.wo-ish.com/user/login", list);
                 Gson gson = new Gson();
                 UserInfo info = gson.fromJson(json, UserInfo.class);
-                if (info.getErrcode() == 0) {
-                    UICommon.showTips(LoginActivity.this, R.mipmap.tips_smile, "登录成功");
-                    updateStatus(SUCCESS);
-                } else {
-                    updateStatus(FAILURE);
-                    UICommon.showTips(LoginActivity.this, R.mipmap.tips_error, "登录失败");
-                }
-//                Message msg = Message.obtain();
-//                msg.what = What_Login;
-//                msg.obj = json;
-//                handler.sendMessage(msg);
+
+                Message msg = Message.obtain();
+                msg.what = What_Login;
+                msg.obj = info;
+                handler.sendMessage(msg);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -253,7 +270,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 //			@Override
 //			public void onSuccess() {
 //        UICommon.showTips(LoginActivity.this, R.mipmap.tips_smile, "登录成功");
-//        updateStatus(SUCCESS);
+//         updateStatus(SUCCESS);
 //			}
 //
 //			@Override
@@ -271,20 +288,20 @@ public class LoginActivity extends Activity implements OnClickListener {
     }
 
 
-    private void showTips(int iconResId, String tips) {
-        if (mTipsToast != null) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                mTipsToast.cancel();
-            }
-        } else {
-            mTipsToast = TipsToast.makeText(getApplication().getBaseContext(), tips,
-                    TipsToast.LENGTH_SHORT);
-        }
-
-        mTipsToast.show();
-        mTipsToast.setIcon(iconResId);
-        mTipsToast.setText(tips);
-    }
+//    private void showTips(int iconResId, String tips) {
+//        if (mTipsToast != null) {
+//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+//                mTipsToast.cancel();
+//            }
+//        } else {
+//            mTipsToast = TipsToast.makeText(getApplication().getBaseContext(), tips,
+//                    TipsToast.LENGTH_SHORT);
+//        }
+//
+//        mTipsToast.show();
+//        mTipsToast.setIcon(iconResId);
+//        mTipsToast.setText(tips);
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
