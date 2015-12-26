@@ -25,9 +25,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.ddschool.R;
-import com.ddschool.ui.UICommon;
+import com.ddschool.bean.UserInfo;
+import com.ddschool.bean.UserToken;
 import com.ddschool.ui.LoadingDialog;
 import com.ddschool.ui.TipsToast;
+import com.ddschool.ui.UICommon;
+import com.frame.common.HttpUtil;
+import com.frame.common.MD5Util;
+import com.frame.common.ThreadPoolUtils;
+import com.google.gson.Gson;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //import com.imsdk.imdeveloper.app.IMApplication;
 
@@ -181,7 +193,45 @@ public class LoginActivity extends Activity implements OnClickListener {
         }
     }
 
+    private class LoginRunnable implements Runnable {
+        @Override
+        public void run() {
+            try {
+//                if (UserToken.getAccessToken().length() < 1) {
+//                    ThreadPoolUtils.execute(new TokenRunnable());
+//                }
+                Log.d("AccessToken", UserToken.getUserToken().getAccessToken());
+                List<NameValuePair> list = new ArrayList<NameValuePair>();
+                list.add(new BasicNameValuePair("phone", mUserNameEditText
+                        .getText().toString()));
+                list.add(new BasicNameValuePair("password", MD5Util
+                        .getMD5String(mPasswordEditText.getText().toString())));
+                Log.d("MD5", MD5Util.getMD5String(mPasswordEditText.getText().toString()));
+                list.add(new BasicNameValuePair("access_token", UserToken.getUserToken()
+                        .getAccessToken()));
+                Log.d("请求参数", list.toString());
+                String json = HttpUtil.sendPostRequest("http://schoolapi2.wo-ish.com/user/login", list);
+                Gson gson = new Gson();
+                UserInfo info = gson.fromJson(json, UserInfo.class);
+                if (info.getErrcode() == 0) {
+                    UICommon.showTips(LoginActivity.this, R.mipmap.tips_smile, "登录成功");
+                    updateStatus(SUCCESS);
+                } else {
+                    updateStatus(FAILURE);
+                    UICommon.showTips(LoginActivity.this, R.mipmap.tips_error, "登录失败");
+                }
+//                Message msg = Message.obtain();
+//                msg.what = What_Login;
+//                msg.obj = json;
+//                handler.sendMessage(msg);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
     private void login() {
+        ThreadPoolUtils.execute(new LoginRunnable());
 //		boolean result = IMMyself.setCustomUserID(mUserNameEditText.getText()
 //				.toString());
 
@@ -202,8 +252,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 //		IMMyself.login(false, 5, new OnActionListener() {
 //			@Override
 //			public void onSuccess() {
-        UICommon.showTips(LoginActivity.this, R.mipmap.tips_smile, "登录成功");
-        updateStatus(SUCCESS);
+//        UICommon.showTips(LoginActivity.this, R.mipmap.tips_smile, "登录成功");
+//        updateStatus(SUCCESS);
 //			}
 //
 //			@Override
