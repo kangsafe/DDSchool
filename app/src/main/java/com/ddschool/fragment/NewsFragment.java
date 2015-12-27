@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
@@ -23,7 +24,6 @@ import com.ddschool.activity.DetailsActivity;
 import com.ddschool.adapter.NewsAdapter;
 import com.ddschool.bean.NoticeList;
 import com.ddschool.bean.UserToken;
-import com.ddschool.lib.view.CustomListView;
 import com.ddschool.lib.view.HeadListView;
 import com.ddschool.tools.Constants;
 import com.frame.common.HttpUtil;
@@ -59,8 +59,8 @@ public class NewsFragment extends Fragment {
         Bundle args = getArguments();
         text = args != null ? args.getString("text") : "";
         channel_id = args != null ? args.getInt("id", 0) : 0;
-        initData();
         super.onCreate(savedInstanceState);
+        initData();
     }
 
     @Override
@@ -114,12 +114,14 @@ public class NewsFragment extends Fragment {
         notify_view = (RelativeLayout) view.findViewById(R.id.notify_view);
         notify_view_text = (TextView) view.findViewById(R.id.notify_view_text);
         item_textview.setText(text);
+
         return view;
     }
 
     private void initData() {
         //newsList = Constants.getNewsList();
 //        ThreadPoolUtils.execute(new NoticeRunnable());
+
     }
 
     Handler handler = new Handler() {
@@ -140,12 +142,12 @@ public class NewsFragment extends Fragment {
                     }
                     mListView.setAdapter(mAdapter);
                     mListView.setOnScrollListener(mAdapter);
-                    mListView.setOnRefreshListener(new CustomListView.OnRefreshListener() {
-                        @Override
-                        public void onRefresh() {
-                            ThreadPoolUtils.execute(new NoticeRunnable());
-                        }
-                    });
+//                    mListView.setOnRefreshListener(new CustomListView.OnRefreshListener() {
+//                        @Override
+//                        public void onRefresh() {
+//                            ThreadPoolUtils.execute(new NoticeRunnable());
+//                        }
+//                    });
                     mListView.setPinnedHeaderView(LayoutInflater.from(activity).inflate(R.layout.list_item_section, mListView, false));
                     mListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -182,7 +184,7 @@ public class NewsFragment extends Fragment {
                     detail_loading.setVisibility(View.GONE);
                     if (mAdapter == null) {
                         mAdapter = new NewsAdapter(activity, newsList);
-                        //判断是不是城市的频道
+//                        //判断是不是城市的频道
 //                        if (channel_id == Constants.CHANNEL_CITY) {
 //                            //是城市频道
 //                            mAdapter.setCityChannel(true);
@@ -211,15 +213,19 @@ public class NewsFragment extends Fragment {
                             }
                         }
                     });
-                    mListView.setOnRefreshListener(new CustomListView.OnRefreshListener() {
+
+                    mListView.setonRefreshListener(new HeadListView.OnRefreshListener() {
+
                         @Override
                         public void onRefresh() {
                             ThreadPoolUtils.execute(new NoticeRunnable());
                         }
                     });
-//                    if (channel_id == 1) {
-                    initNotify();
-//                    }
+                    if (channel_id == 1) {
+                        initNotify();
+                    }
+//                    mAdapter.notifyDataSetChanged();
+//                    mListView.onRefreshComplete();
                     break;
                 default:
                     break;
