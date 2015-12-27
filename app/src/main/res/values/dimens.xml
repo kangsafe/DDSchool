@@ -18,5 +18,5 @@
     <dimen name="item_image_height">60.0dip</dimen>
     <dimen name="item_image_total_padding">60.0dip</dimen>
     <dimen name="item_image_max_width">180.0dip</dimen>
-    <dimen name="alt_mark_size">15.0dip</dimen>
+    <dimen name="alt_mark_size">20.0dip</dimen>
 </resources>

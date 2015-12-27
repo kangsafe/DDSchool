@@ -80,19 +80,20 @@ public class NewsFragment extends Fragment {
                 //handler.obtainMessage(SET_NEWSLIST).sendToTarget();
                 handler.obtainMessage(What_NoticList).sendToTarget();
             } else {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // TODO Auto-generated method stub
-                        try {
-                            Thread.sleep(2);
-                        } catch (InterruptedException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-                        handler.obtainMessage(SET_NEWSLIST).sendToTarget();
-                    }
-                }).start();
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // TODO Auto-generated method stub
+//                        try {
+//                            Thread.sleep(2);
+//                        } catch (InterruptedException e) {
+//                            // TODO Auto-generated catch block
+//                            e.printStackTrace();
+//                        }
+//                        handler.obtainMessage(SET_NEWSLIST).sendToTarget();
+//                    }
+//                }).start();
+                ThreadPoolUtils.execute(new NoticeRunnable());
             }
         } else {
             //fragment不可见时不执行操作
@@ -117,7 +118,7 @@ public class NewsFragment extends Fragment {
 
     private void initData() {
         //newsList = Constants.getNewsList();
-        ThreadPoolUtils.execute(new NoticeRunnable());
+//        ThreadPoolUtils.execute(new NoticeRunnable());
     }
 
     Handler handler = new Handler() {
@@ -171,11 +172,11 @@ public class NewsFragment extends Fragment {
                     if (mAdapter == null) {
                         mAdapter = new NewsAdapter(activity, newsList);
                         //判断是不是城市的频道
-                        if (channel_id == Constants.CHANNEL_CITY) {
-                            //是城市频道
-                            mAdapter.setCityChannel(true);
-                            initCityChannel();
-                        }
+//                        if (channel_id == Constants.CHANNEL_CITY) {
+//                            //是城市频道
+//                            mAdapter.setCityChannel(true);
+//                            initCityChannel();
+//                        }
                     }
                     mListView.setAdapter(mAdapter);
                     mListView.setOnScrollListener(mAdapter);
@@ -275,10 +276,12 @@ public class NewsFragment extends Fragment {
                         UserToken.getInstance().getAccessToken()));
                 Log.i("请求参数", list.toString());
                 String json = HttpUtil.sendPostRequest("http://schoolapi2.wo-ish.com/notice/list", list);
+                Log.i(TAG,json);
                 Message msg = Message.obtain();
                 msg.what = What_NoticList;
                 msg.obj = json;
                 handler.sendMessage(msg);
+
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
