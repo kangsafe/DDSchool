@@ -21,10 +21,9 @@ import com.ddschool.R;
 import com.ddschool.activity.CityListActivity;
 import com.ddschool.activity.DetailsActivity;
 import com.ddschool.adapter.NewsAdapter;
-import com.ddschool.bean.BwConst;
-import com.ddschool.bean.NewsEntity;
 import com.ddschool.bean.NoticeList;
 import com.ddschool.bean.UserToken;
+import com.ddschool.lib.view.CustomListView;
 import com.ddschool.lib.view.HeadListView;
 import com.ddschool.tools.Constants;
 import com.frame.common.HttpUtil;
@@ -47,10 +46,12 @@ public class NewsFragment extends Fragment {
     int channel_id;
     ImageView detail_loading;
     public final static int SET_NEWSLIST = 0;
-    public final static int What_NoticList=0x01;
+    public final static int What_NoticList = 0x01;
     //Toast提示框
     private RelativeLayout notify_view;
     private TextView notify_view_text;
+    private static int pIndex = 1;
+    private static int RefreshNums = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -139,6 +140,12 @@ public class NewsFragment extends Fragment {
                     }
                     mListView.setAdapter(mAdapter);
                     mListView.setOnScrollListener(mAdapter);
+                    mListView.setOnRefreshListener(new CustomListView.OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            ThreadPoolUtils.execute(new NoticeRunnable());
+                        }
+                    });
                     mListView.setPinnedHeaderView(LayoutInflater.from(activity).inflate(R.layout.list_item_section, mListView, false));
                     mListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -164,9 +171,13 @@ public class NewsFragment extends Fragment {
                     }
                     break;
                 case What_NoticList:
-                    NoticeList noticeList=new Gson().fromJson(msg.obj.toString(),NoticeList.class);
-                    if(noticeList.getErrcode()==0){
-                        newsList=noticeList.getData();
+                    NoticeList noticeList = new Gson().fromJson(msg.obj.toString(), NoticeList.class);
+                    if (noticeList.getErrcode() == 0 && noticeList.getData().size() > 0) {
+                        newsList.addAll(noticeList.getData());
+                        pIndex++;
+                        RefreshNums = noticeList.getData().size();
+                    } else {
+                        RefreshNums = 0;
                     }
                     detail_loading.setVisibility(View.GONE);
                     if (mAdapter == null) {
@@ -200,9 +211,15 @@ public class NewsFragment extends Fragment {
                             }
                         }
                     });
-                    if (channel_id == 1) {
-                        initNotify();
-                    }
+                    mListView.setOnRefreshListener(new CustomListView.OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            ThreadPoolUtils.execute(new NoticeRunnable());
+                        }
+                    });
+//                    if (channel_id == 1) {
+                    initNotify();
+//                    }
                     break;
                 default:
                     break;
@@ -234,7 +251,7 @@ public class NewsFragment extends Fragment {
             @Override
             public void run() {
                 // TODO Auto-generated method stub
-                notify_view_text.setText(String.format(getString(R.string.ss_pattern_update), 10));
+                notify_view_text.setText(String.format(getString(R.string.ss_pattern_update), RefreshNums));
                 notify_view.setVisibility(View.VISIBLE);
                 new Handler().postDelayed(new Runnable() {
 
@@ -270,13 +287,13 @@ public class NewsFragment extends Fragment {
         public void run() {
             try {
                 List<NameValuePair> list = new ArrayList<>();
-                list.add(new BasicNameValuePair("type", (channel_id+1)+""));
-                list.add(new BasicNameValuePair("pageindex", "1"));
+                list.add(new BasicNameValuePair("type", String.valueOf(channel_id + 1)));
+                list.add(new BasicNameValuePair("pageindex", String.valueOf(pIndex)));
                 list.add(new BasicNameValuePair("access_token",
                         UserToken.getInstance().getAccessToken()));
                 Log.i("请求参数", list.toString());
                 String json = HttpUtil.sendPostRequest("http://schoolapi2.wo-ish.com/notice/list", list);
-                Log.i(TAG,json);
+                Log.i(TAG, json);
                 Message msg = Message.obtain();
                 msg.what = What_NoticList;
                 msg.obj = json;

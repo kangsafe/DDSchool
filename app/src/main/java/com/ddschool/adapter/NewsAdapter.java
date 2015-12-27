@@ -153,20 +153,25 @@ public class NewsAdapter extends BaseAdapter implements SectionIndexer, HeaderAd
         mHolder.item_source.setText(news.getDepname());
         mHolder.comment_count.setText("评论" + news.getType());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date d;
+        Date startDate;
         try {
-            d = format.parse(news.getDate());
+            startDate = format.parse(news.getDate());
         } catch (Exception ex) {
             ex.printStackTrace();
-            d = new Date();
+            startDate = new Date(System.currentTimeMillis());
         }
-        long num = (new Date().getTime() - d.getTime()) / 3600;
-        Log.i("时间小时",num+"");
-//        if (num > 24) {
-//            mHolder.publish_time.setText(news.getDate());
-//        } else {
-            mHolder.publish_time.setText(news.getDate() + "小时前");
-//        }
+        Date endDate = new Date(System.currentTimeMillis());
+        long num = (endDate.getTime() - startDate.getTime()) / 1000L;
+        Log.i("时间小时", num + "");
+        if (num / 3600 > 4 * 24) {
+            mHolder.publish_time.setText(news.getDate());
+        } else {
+            mHolder.publish_time.setText(num / 3600 / 24 > 0 ?
+                    num / 3600 / 24 + "天前" : num / 3600 > 0 ?
+                    num / 3600 + "小时前" : num / 60 > 0 ?
+                    num / 60 + "分钟前" : num > 30 ?
+                    num + "秒前" : "刚刚");
+        }
 //		List<String> imgUrlList = news.getPicList();
         mHolder.popicon.setVisibility(View.VISIBLE);
         mHolder.comment_count.setVisibility(View.VISIBLE);
