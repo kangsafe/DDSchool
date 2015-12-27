@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources></resources>
+<!--<resources xmlns:android="http://schemas.android.com/apk/res/android">-->
+
+    <!--<declare-styleable name="Switch_Style">-->
+        <!--&lt;!&ndash; Default style for the Switch widget. &ndash;&gt;-->
+        <!--<attr name="switchStyle" format="reference" />-->
+    <!--</declare-styleable>-->
+    <!--<declare-styleable name="SwitchButton">-->
+
+        <!--&lt;!&ndash; Drawable to use as the "thumb" that switches back and forth. &ndash;&gt;-->
+        <!--<attr name="thumb" format="reference" />-->
+        <!--&lt;!&ndash; Drawable to use as the "track" that the switch thumb slides within. &ndash;&gt;-->
+        <!--<attr name="track" format="reference" />-->
+        <!--&lt;!&ndash; Text to use when the switch is in the checked/"on" state. &ndash;&gt;-->
+        <!--<attr name="textOn" format="string" />-->
+        <!--&lt;!&ndash; Text to use when the switch is in the unchecked/"off" state. &ndash;&gt;-->
+        <!--<attr name="textOff" format="string" />-->
+        <!--&lt;!&ndash; Amount of padding on either side of text within the switch thumb. &ndash;&gt;-->
+        <!--<attr name="thumbTextPadding" format="dimension" />-->
+        <!--&lt;!&ndash; TextAppearance style for text displayed on the switch thumb. &ndash;&gt;-->
+        <!--<attr name="switchTextAppearance" format="reference" />-->
+        <!--&lt;!&ndash; Minimum width for the switch component &ndash;&gt;-->
+        <!--<attr name="switchMinWidth" format="dimension" />-->
+        <!--&lt;!&ndash; Minimum space between the switch and caption text &ndash;&gt;-->
+        <!--<attr name="switchPadding" format="dimension" />-->
+    <!--</declare-styleable>-->
+    <!-- -->
+    <!--<declare-styleable name="TextAppearance">-->
+        <!--&lt;!&ndash; Text color. &ndash;&gt;-->
+        <!--<attr name="textColor" format="reference|color" />-->
+        <!--&lt;!&ndash; Size of the text. Recommended dimension type for text is "sp" for scaled-pixels (example: 15sp). &ndash;&gt;-->
+        <!--<attr name="textSize" format="dimension" />-->
+        <!--&lt;!&ndash; Style (bold, italic, bolditalic) for the text. &ndash;&gt;-->
+        <!--<attr name="textStyle">-->
+            <!--<flag name="normal" value="0" />-->
+            <!--<flag name="bold" value="1" />-->
+            <!--<flag name="italic" value="2" />-->
+        <!--</attr>-->
+        <!--&lt;!&ndash; Typeface (normal, sans, serif, monospace) for the text. &ndash;&gt;-->
+        <!--<attr name="typeface">-->
+            <!--<enum name="normal" value="0" />-->
+            <!--<enum name="sans" value="1" />-->
+            <!--<enum name="serif" value="2" />-->
+            <!--<enum name="monospace" value="3" />-->
+        <!--</attr>-->
+        <!--&lt;!&ndash; Color of the text selection highlight. &ndash;&gt;-->
+        <!--<attr name="textColorHighlight" format="reference|color" />-->
+        <!--&lt;!&ndash; Color of the hint text. &ndash;&gt;-->
+        <!--<attr name="textColorHint" format="reference|color" />-->
+        <!--&lt;!&ndash; Color of the links. &ndash;&gt;-->
+        <!--<attr name="textColorLink" format="reference|color" />-->
+        <!--&lt;!&ndash; Present the text in ALL CAPS. This may use a small-caps form when available. &ndash;&gt;-->
+        <!--<attr name="textAllCaps" format="boolean" />-->
+    <!--</declare-styleable>-->
+
+    <!--<style name="Switch">-->
+        <!--<item name="track">@drawable/switch_btn</item>-->
+        <!--<item name="thumb">@mipmap/switch_btn_slipper</item>-->
+        <!--<item name="switchTextAppearance">@android:style/TextAppearance.Small</item>-->
+        <!--<item name="textOn">@string/switch_on</item>-->
+        <!--<item name="textOff">@string/switch_off</item>-->
+        <!--<item name="thumbTextPadding">16dip</item>-->
+        <!--<item name="switchMinWidth">60dip</item>-->
+        <!--<item name="switchPadding">10dip</item>-->
+        <!--<item name="android:textColor">#FFFFFF</item>-->
+        <!--<item name="android:background">#00FFFFFF</item>-->
+    <!--</style>-->
+
+    <!--<string name="switch_on"></string>-->
+    <!--<string name="switch_off"></string>-->
+    <!--<color name="switchtextcolor">#FFFFFF</color>-->
+<!--</resources>-->
