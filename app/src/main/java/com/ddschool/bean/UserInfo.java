@@ -6,6 +6,19 @@ import java.util.List;
  * Created by Administrator on 2015/12/26.
  */
 public class UserInfo extends BwResult {
+    public UserInfo() {
+
+    }
+
+    private static UserInfo instance;
+
+    public static UserInfo getInstance() {
+        if (instance != null) {
+            instance = new UserInfo();
+        }
+        return instance;
+    }
+
     private UserInfoData data;
 
     public UserInfoData getData() {
@@ -16,7 +29,7 @@ public class UserInfo extends BwResult {
         this.data = data;
     }
 
-    private class UserInfoData extends BaseUserInfo{
+    private class UserInfoData extends BaseUserInfo {
 
         private List<UserRole> roles;
         private List<UserClass> classes;

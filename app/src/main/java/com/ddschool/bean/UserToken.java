@@ -3,13 +3,12 @@ package com.ddschool.bean;
 public class UserToken {
 	private static String AccessToken;
 	private static int Timeout;
-	private static UserToken userToken;
 	private static UserToken instance;
 
 	private UserToken() {
 	}
 
-	public static UserToken getUserToken() {
+	public static UserToken getInstance() {
 		if (instance == null) {
 			instance = new UserToken();
 		}

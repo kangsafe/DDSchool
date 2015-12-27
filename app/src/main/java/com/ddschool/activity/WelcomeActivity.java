@@ -49,8 +49,8 @@ public class WelcomeActivity extends Activity {
                             BwToken.class);
                     if (jb.getErrcode() == 0) {
                         Log.i("Token", jb.getData().getAccess_token());
-                        UserToken.getUserToken().setAccessToken(jb.getData().getAccess_token());
-                        UserToken.getUserToken().setTimeout(jb.getData().getExpires_in() - 20);
+                        UserToken.getInstance().setAccessToken(jb.getData().getAccess_token());
+                        UserToken.getInstance().setTimeout(jb.getData().getExpires_in() - 20);
                     } else {
                         Toast.makeText(getApplicationContext(), jb.getErrmsg(),
                                 Toast.LENGTH_SHORT).show();

@@ -13,6 +13,7 @@ import android.widget.GridView;
 import android.widget.SimpleAdapter;
 
 import com.ddschool.R;
+import com.ddschool.activity.NoticeActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,11 +60,9 @@ public class SchoolFragment extends Fragment {
         //HashMap<String, ImageView> block = null;
         for (int i = 0; i < titles.length; i++) {
             item = new HashMap<String, Object>();
-
             item.put("title", titles[i]);
             item.put("icon", iconResourse[i]);
-
-
+            item.put("id", i);
             items.add(item);
         }
         this.gridAdapter = new SimpleAdapter(v.getContext().getApplicationContext(), items, R.layout.content_school_item,
@@ -79,11 +78,23 @@ public class SchoolFragment extends Fragment {
                     HashMap<String, String> item = (HashMap<String, String>) gridView.getItemAtPosition(position);
 
                     String current_title = item.get("title");
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
                     switch (position) {
                         case 0://签到信息:
-                            FragmentTransaction ft = getFragmentManager().beginTransaction();
-                            SchoolSignFragment constactFragment = new SchoolSignFragment();
-                            ft.replace(R.id.content_container, constactFragment);
+                            SchoolSignFragment schoolSignFragment = new SchoolSignFragment();
+                            ft.replace(R.id.content_container, schoolSignFragment);
+                            ft.commit();
+                            break;
+                        case 1://通知公告
+//                            SchoolNoticeFragment schoolNoticeFragment = new SchoolNoticeFragment();
+//                            ft.replace(R.id.content_container, schoolNoticeFragment);
+//                            ft.commit();
+                            Intent intent=new Intent().setClass(getContext(), NoticeActivity.class);
+                            startActivity(intent);
+                            break;
+                        case 2://小纸条
+                            ItemFragment itemFragment=new ItemFragment();
+                            ft.replace(R.id.content_container, itemFragment);
                             ft.commit();
                             break;
                         default:

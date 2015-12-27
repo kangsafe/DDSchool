@@ -10,7 +10,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -95,7 +94,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         mUserNameEditText.addTextChangedListener(mTextWatcher);
         mySharedPreferences = getSharedPreferences("imsdk", Activity.MODE_PRIVATE);
         mUserNameEditText.setText(mySharedPreferences.getString("userName", ""));
-
+        mPasswordEditText.setText(mySharedPreferences.getString("userpass", ""));
     }
 
     private void initListener() {
@@ -182,6 +181,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 if (mRememberMe.isChecked()) {
                     SharedPreferences.Editor editor = mySharedPreferences.edit();
                     editor.putString("userName", mUserNameEditText.getText().toString());
+                    editor.putString("userpass",mPasswordEditText.getText().toString());
                     editor.commit();
                 }
                 Log.i("等LoginActivity", "123");
@@ -223,14 +223,14 @@ public class LoginActivity extends Activity implements OnClickListener {
 //                if (UserToken.getAccessToken().length() < 1) {
 //                    ThreadPoolUtils.execute(new TokenRunnable());
 //                }
-                Log.d("AccessToken", UserToken.getUserToken().getAccessToken());
+                Log.d("AccessToken", UserToken.getInstance().getAccessToken());
                 List<NameValuePair> list = new ArrayList<NameValuePair>();
                 list.add(new BasicNameValuePair("phone", mUserNameEditText
                         .getText().toString()));
                 list.add(new BasicNameValuePair("password", MD5Util
                         .getMD5String(mPasswordEditText.getText().toString())));
                 Log.d("MD5", MD5Util.getMD5String(mPasswordEditText.getText().toString()));
-                list.add(new BasicNameValuePair("access_token", UserToken.getUserToken()
+                list.add(new BasicNameValuePair("access_token", UserToken.getInstance()
                         .getAccessToken()));
                 Log.d("请求参数", list.toString());
                 String json = HttpUtil.sendPostRequest("http://schoolapi2.wo-ish.com/user/login", list);
