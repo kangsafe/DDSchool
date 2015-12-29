@@ -17,6 +17,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ddschool.R;
 import com.ddschool.activity.CityListActivity;
@@ -26,6 +27,7 @@ import com.ddschool.bean.NoticeList;
 import com.ddschool.bean.UserToken;
 import com.ddschool.lib.view.HeadListView;
 import com.ddschool.tools.Constants;
+import com.ddschool.widget.XListView;
 import com.frame.common.HttpUtil;
 import com.frame.common.ThreadPoolUtils;
 import com.google.gson.Gson;
@@ -33,14 +35,18 @@ import com.google.gson.Gson;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
-public class NewsFragment extends Fragment {
+public class NewsFragment extends Fragment implements XListView.IXListViewListener {
     private final static String TAG = "NewsFragment";
     Activity activity;
     ArrayList<NoticeList.NoticeListItem> newsList = new ArrayList<NoticeList.NoticeListItem>();
-    HeadListView mListView;
+    //HeadListView mListView;
+    private XListView mListView;
     NewsAdapter mAdapter;
     String text;
     int channel_id;
@@ -50,8 +56,8 @@ public class NewsFragment extends Fragment {
     //Toast提示框
     private RelativeLayout notify_view;
     private TextView notify_view_text;
-    private static int pIndex = 1;
-    private static int RefreshNums = 0;
+    private int pIndex = 1;
+    private int RefreshNums = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,22 +84,8 @@ public class NewsFragment extends Fragment {
         if (isVisibleToUser) {
             //fragment可见时加载数据
             if (newsList != null && newsList.size() != 0) {
-                //handler.obtainMessage(SET_NEWSLIST).sendToTarget();
                 handler.obtainMessage(What_NoticList).sendToTarget();
             } else {
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        // TODO Auto-generated method stub
-//                        try {
-//                            Thread.sleep(2);
-//                        } catch (InterruptedException e) {
-//                            // TODO Auto-generated catch block
-//                            e.printStackTrace();
-//                        }
-//                        handler.obtainMessage(SET_NEWSLIST).sendToTarget();
-//                    }
-//                }).start();
                 ThreadPoolUtils.execute(new NoticeRunnable());
             }
         } else {
@@ -107,7 +99,16 @@ public class NewsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.news_fragment, null);
-        mListView = (HeadListView) view.findViewById(R.id.mListView);
+        //mListView = (HeadListView) view.findViewById(R.id.mListView);
+        mListView = (XListView) view.findViewById(R.id.mListView);
+        mListView.setPullRefreshEnable(true);
+        mListView.setPullLoadEnable(true);
+        mListView.setAutoLoadEnable(true);
+        mListView.setXListViewListener(this);
+        mListView.setRefreshTime(getTime());
+        mAdapter = new NewsAdapter(activity, newsList);
+        mListView.setAdapter(mAdapter);
+
         TextView item_textview = (TextView) view.findViewById(R.id.item_textview);
         detail_loading = (ImageView) view.findViewById(R.id.detail_loading);
         //Toast提示框
@@ -116,6 +117,34 @@ public class NewsFragment extends Fragment {
         item_textview.setText(text);
 
         return view;
+    }
+
+    /*
+        * 下拉刷新
+        * */
+    @Override
+    public void onRefresh() {
+        mAdapter = null;
+        pIndex = 1;
+        ThreadPoolUtils.execute(new NoticeRunnable());
+    }
+
+    /*
+    * 加载更多
+    * */
+    @Override
+    public void onLoadMore() {
+        ThreadPoolUtils.execute(new NoticeRunnable());
+    }
+
+    private void onLoad() {
+        mListView.stopRefresh();
+        mListView.stopLoadMore();
+        mListView.setRefreshTime(getTime());
+    }
+
+    private String getTime() {
+        return new SimpleDateFormat("MM-dd HH:mm", Locale.CHINA).format(new Date());
     }
 
     private void initData() {
@@ -127,105 +156,32 @@ public class NewsFragment extends Fragment {
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            // TODO Auto-generated method stub
             switch (msg.what) {
-                case SET_NEWSLIST:
-                    detail_loading.setVisibility(View.GONE);
-                    if (mAdapter == null) {
-                        mAdapter = new NewsAdapter(activity, newsList);
-                        //判断是不是城市的频道
-                        if (channel_id == Constants.CHANNEL_CITY) {
-                            //是城市频道
-                            mAdapter.setCityChannel(true);
-                            initCityChannel();
-                        }
-                    }
-                    mListView.setAdapter(mAdapter);
-                    mListView.setOnScrollListener(mAdapter);
-//                    mListView.setOnRefreshListener(new CustomListView.OnRefreshListener() {
-//                        @Override
-//                        public void onRefresh() {
-//                            ThreadPoolUtils.execute(new NoticeRunnable());
-//                        }
-//                    });
-                    mListView.setPinnedHeaderView(LayoutInflater.from(activity).inflate(R.layout.list_item_section, mListView, false));
-                    mListView.setOnItemClickListener(new OnItemClickListener() {
-
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view,
-                                                int position, long id) {
-                            Intent intent = new Intent(activity, DetailsActivity.class);
-                            if (channel_id == Constants.CHANNEL_CITY) {
-                                if (position != 0) {
-                                    //intent.putExtra("news", mAdapter.getItem(position - 1));
-                                    startActivity(intent);
-                                    activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                                }
-                            } else {
-                                //intent.putExtra("news", mAdapter.getItem(position));
-                                startActivity(intent);
-                                activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                            }
-                        }
-                    });
-                    if (channel_id == 1) {
-                        initNotify();
-                    }
-                    break;
                 case What_NoticList:
                     NoticeList noticeList = new Gson().fromJson(msg.obj.toString(), NoticeList.class);
-                    if (noticeList.getErrcode() == 0 && noticeList.getData().size() > 0) {
-                        newsList.addAll(noticeList.getData());
+                    if (noticeList.getErrcode() == 0) {
                         pIndex++;
                         RefreshNums = noticeList.getData().size();
+                        //刷新
+                        if (mAdapter == null) {
+                            newsList.clear();
+                            newsList = noticeList.getData();
+                            mAdapter = new NewsAdapter(activity, newsList);
+                            mListView.setAdapter(mAdapter);
+
+                        } else {//添加
+                            newsList.addAll(noticeList.getData());
+                            mAdapter.notifyDataSetChanged();
+                        }
+                        onLoad();
                     } else {
                         RefreshNums = 0;
                     }
+                    if (RefreshNums < 1) {
+                        Log.i(TAG, "RefreshNums");
+                        Toast.makeText(activity, "已到最后一条数据", Toast.LENGTH_SHORT);
+                    }
                     detail_loading.setVisibility(View.GONE);
-                    if (mAdapter == null) {
-                        mAdapter = new NewsAdapter(activity, newsList);
-//                        //判断是不是城市的频道
-//                        if (channel_id == Constants.CHANNEL_CITY) {
-//                            //是城市频道
-//                            mAdapter.setCityChannel(true);
-//                            initCityChannel();
-//                        }
-                    }
-                    mListView.setAdapter(mAdapter);
-                    mListView.setOnScrollListener(mAdapter);
-                    mListView.setPinnedHeaderView(LayoutInflater.from(activity).inflate(R.layout.list_item_section, mListView, false));
-                    mListView.setOnItemClickListener(new OnItemClickListener() {
-
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view,
-                                                int position, long id) {
-                            Intent intent = new Intent(activity, DetailsActivity.class);
-                            if (channel_id == Constants.CHANNEL_CITY) {
-                                if (position != 0) {
-                                    //intent.putExtra("news", mAdapter.getItem(position - 1));
-                                    startActivity(intent);
-                                    activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                                }
-                            } else {
-                                //intent.putExtra("news", mAdapter.getItem(position));
-                                startActivity(intent);
-                                activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                            }
-                        }
-                    });
-
-                    mListView.setonRefreshListener(new HeadListView.OnRefreshListener() {
-
-                        @Override
-                        public void onRefresh() {
-                            ThreadPoolUtils.execute(new NoticeRunnable());
-                        }
-                    });
-                    if (channel_id == 1) {
-                        initNotify();
-                    }
-//                    mAdapter.notifyDataSetChanged();
-//                    mListView.onRefreshComplete();
                     break;
                 default:
                     break;

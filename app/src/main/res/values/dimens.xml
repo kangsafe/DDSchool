@@ -19,4 +19,7 @@
     <dimen name="item_image_total_padding">60.0dip</dimen>
     <dimen name="item_image_max_width">180.0dip</dimen>
     <dimen name="alt_mark_size">20.0dip</dimen>
+    <dimen name="header_height">60dp</dimen>
+    <dimen name="footer_height">90dp</dimen>
+    <dimen name="footer_padding">10dp</dimen>
 </resources>

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/item_textview"
@@ -19,7 +19,15 @@
         android:layout_centerInParent="true"
         android:src="@mipmap/detail_loading" />
 
-    <com.ddschool.lib.view.HeadListView
+    <!--<com.ddschool.lib.view.HeadListView-->
+    <!--android:id="@+id/mListView"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:divider="@android:color/transparent"-->
+    <!--android:dividerHeight="0dp"-->
+    <!--android:fadingEdge="none"-->
+    <!--android:scrollbars="none" />-->
+    <com.ddschool.widget.XListView
         android:id="@+id/mListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,7 +44,7 @@
         android:layout_marginRight="6.0dip"
         android:layout_marginTop="6.0dip"
         android:background="@drawable/bg_notify"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/notify_view_text"
@@ -52,7 +60,7 @@
             android:layout_height="fill_parent"
             android:layout_alignParentRight="true"
             android:orientation="horizontal"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <View
                 android:id="@+id/notify_view_divider"

@@ -745,4 +745,6 @@
     <color name="ss_top_progressbar_start">#10ffffff</color>
     <color name="ss_top_progressbar_end">#ffffffff</color>
 
+    <color name="background">#F7F4F0</color>
+    <color name="title_color">#333333</color>
 </resources>
