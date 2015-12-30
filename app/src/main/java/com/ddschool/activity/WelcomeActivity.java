@@ -2,6 +2,7 @@ package com.ddschool.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,7 +28,7 @@ import java.util.List;
 public class WelcomeActivity extends Activity {
     private long mSplashDelay = 2000;
     private static final int What_Token = 0x01;
-
+    private SharedPreferences mySharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +36,7 @@ public class WelcomeActivity extends Activity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_welcome);
+        mySharedPreferences = getSharedPreferences("UserToken", Activity.MODE_PRIVATE);
         ThreadPoolUtils.execute(new TokenRunnable());
     }
 
@@ -49,8 +51,13 @@ public class WelcomeActivity extends Activity {
                             BwToken.class);
                     if (jb.getErrcode() == 0) {
                         Log.i("Token", jb.getData().getAccess_token());
-                        UserToken.getInstance().setAccessToken(jb.getData().getAccess_token());
-                        UserToken.getInstance().setTimeout(jb.getData().getExpires_in() - 20);
+                        UserToken.getInstance(getApplicationContext()).setAccessToken(jb.getData().getAccess_token());
+                        UserToken.getInstance(getApplicationContext()).setTimeout(jb.getData().getExpires_in() - 20);
+
+                        SharedPreferences.Editor editor = mySharedPreferences.edit();
+                        editor.putString("AccsessToken", jb.getData().getAccess_token());
+                        editor.putInt("Timeout", jb.getData().getExpires_in() - 20);
+                        editor.commit();
                     } else {
                         Toast.makeText(getApplicationContext(), jb.getErrmsg(),
                                 Toast.LENGTH_SHORT).show();

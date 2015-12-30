@@ -27,6 +27,8 @@ import com.ddschool.bean.NoticeList;
 import com.ddschool.bean.UserToken;
 import com.ddschool.lib.view.HeadListView;
 import com.ddschool.tools.Constants;
+import com.ddschool.ui.LoadingDialog;
+import com.ddschool.ui.UICommon;
 import com.ddschool.widget.XListView;
 import com.frame.common.HttpUtil;
 import com.frame.common.ThreadPoolUtils;
@@ -43,6 +45,7 @@ import java.util.Locale;
 
 public class NewsFragment extends Fragment implements XListView.IXListViewListener {
     private final static String TAG = "NewsFragment";
+    private LoadingDialog mDialog;
     Activity activity;
     ArrayList<NoticeList.NoticeListItem> newsList = new ArrayList<NoticeList.NoticeListItem>();
     //HeadListView mListView;
@@ -124,6 +127,7 @@ public class NewsFragment extends Fragment implements XListView.IXListViewListen
         * */
     @Override
     public void onRefresh() {
+        detail_loading.setVisibility(View.VISIBLE);
         mAdapter = null;
         pIndex = 1;
         ThreadPoolUtils.execute(new NoticeRunnable());
@@ -134,6 +138,7 @@ public class NewsFragment extends Fragment implements XListView.IXListViewListen
     * */
     @Override
     public void onLoadMore() {
+        detail_loading.setVisibility(View.VISIBLE);
         ThreadPoolUtils.execute(new NoticeRunnable());
     }
 
@@ -179,7 +184,7 @@ public class NewsFragment extends Fragment implements XListView.IXListViewListen
                     }
                     if (RefreshNums < 1) {
                         Log.i(TAG, "RefreshNums");
-                        Toast.makeText(activity, "已到最后一条数据", Toast.LENGTH_SHORT);
+                        UICommon.showTips(activity, R.mipmap.tips_smile, "已到最后一条数据");
                     }
                     detail_loading.setVisibility(View.GONE);
                     break;
@@ -249,10 +254,10 @@ public class NewsFragment extends Fragment implements XListView.IXListViewListen
         public void run() {
             try {
                 List<NameValuePair> list = new ArrayList<>();
-                list.add(new BasicNameValuePair("type", String.valueOf(channel_id + 1)));
+                list.add(new BasicNameValuePair("type", String.valueOf(channel_id)));
                 list.add(new BasicNameValuePair("pageindex", String.valueOf(pIndex)));
                 list.add(new BasicNameValuePair("access_token",
-                        UserToken.getInstance().getAccessToken()));
+                        UserToken.getInstance(getContext()).getAccessToken()));
                 Log.i("请求参数", list.toString());
                 String json = HttpUtil.sendPostRequest("http://schoolapi2.wo-ish.com/notice/list", list);
                 Log.i(TAG, json);

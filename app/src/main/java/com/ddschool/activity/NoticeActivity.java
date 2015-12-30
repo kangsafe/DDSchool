@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -118,9 +119,11 @@ public class NoticeActivity extends AppCompatActivity {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        FragmentManager fragmentManager;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            fragmentManager = fm;
         }
 
         @Override
@@ -129,12 +132,34 @@ public class NoticeActivity extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             //return ItemFragment.newInstance(position + 1);
             //return PlaceholderFragment.newInstance(position + 1);
+//            fragmentManager = getSupportFragmentManager();
+//            FragmentTransaction ft = fragmentManager.beginTransaction();
+//            Fragment currentFragment = fragmentManager.findFragmentByTag("News" + position);
+//            if (currentFragment == null) {
             NewsFragment fragment = new NewsFragment();
             Bundle args = new Bundle();
-            args.putInt("id", position);
-            args.putString("text","班级通知");
+            args.putInt("id", position + 1);
+            args.putString("text", "班级通知");
             fragment.setArguments(args);
-            return fragment;//NewsFragment.instantiate(getApplicationContext(),"news",args);
+            return fragment;
+//                currentFragment = fragment;
+//                ft.add(R.id.container, currentFragment, "News" + position);
+//            }
+////            if (lastFragment != null) {
+////                ft.hide(lastFragment);
+////            }
+//            if (currentFragment.isDetached()) {
+//                ft.attach(currentFragment);
+//            }
+//            ft.show(currentFragment);
+//            //lastFragment = currentFragment;
+//            ft.commit();
+////            NewsFragment fragment = new NewsFragment();
+////            Bundle args = new Bundle();
+////            args.putInt("id", position);
+////            args.putString("text","班级通知");
+////            fragment.setArguments(args);
+//            return currentFragment;
         }
 
         @Override

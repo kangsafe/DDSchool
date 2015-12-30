@@ -223,14 +223,14 @@ public class LoginActivity extends Activity implements OnClickListener {
 //                if (UserToken.getAccessToken().length() < 1) {
 //                    ThreadPoolUtils.execute(new TokenRunnable());
 //                }
-                Log.d("AccessToken", UserToken.getInstance().getAccessToken());
+                Log.d("AccessToken", UserToken.getInstance(getApplicationContext()).getAccessToken());
                 List<NameValuePair> list = new ArrayList<NameValuePair>();
                 list.add(new BasicNameValuePair("phone", mUserNameEditText
                         .getText().toString()));
                 list.add(new BasicNameValuePair("password", MD5Util
                         .getMD5String(mPasswordEditText.getText().toString())));
                 Log.d("MD5", MD5Util.getMD5String(mPasswordEditText.getText().toString()));
-                list.add(new BasicNameValuePair("access_token", UserToken.getInstance()
+                list.add(new BasicNameValuePair("access_token", UserToken.getInstance(getApplicationContext())
                         .getAccessToken()));
                 Log.d("请求参数", list.toString());
                 String json = HttpUtil.sendPostRequest("http://schoolapi2.wo-ish.com/user/login", list);
