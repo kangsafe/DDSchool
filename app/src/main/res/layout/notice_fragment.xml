@@ -12,21 +12,6 @@
         android:text=""
         android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/detail_loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:src="@mipmap/detail_loading" />
-
-    <!--<com.ddschool.lib.view.HeadListView-->
-    <!--android:id="@+id/mListView"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:divider="@android:color/transparent"-->
-    <!--android:dividerHeight="0dp"-->
-    <!--android:fadingEdge="none"-->
-    <!--android:scrollbars="none" />-->
     <com.ddschool.widget.XListView
         android:id="@+id/mListView"
         android:layout_width="match_parent"

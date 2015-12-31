@@ -5,7 +5,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,11 +16,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ddschool.R;
-import com.ddschool.fragment.ItemFragment;
-import com.ddschool.fragment.NewsFragment;
+import com.ddschool.fragment.NoticeFragment;
+
+import java.util.ArrayList;
 
 public class NoticeActivity extends AppCompatActivity {
-
+    private ArrayList<Fragment> fragmentList = new ArrayList<Fragment>();
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -46,7 +46,15 @@ public class NoticeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        for (int i = 0; i < 2; i++) {
+            NoticeFragment fragment = new NoticeFragment();
+            Bundle args = new Bundle();
+            args.putInt("id", i + 1);
+            args.putString("text", "班级通知");
+            fragment.setArguments(args);
+            fragmentList.add(fragment);
+        }
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), fragmentList);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -120,10 +128,12 @@ public class NoticeActivity extends AppCompatActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
         FragmentManager fragmentManager;
+        ArrayList<Fragment> list;
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        public SectionsPagerAdapter(FragmentManager fm, ArrayList<Fragment> list) {
             super(fm);
             fragmentManager = fm;
+            this.list = list;
         }
 
         @Override
@@ -136,12 +146,12 @@ public class NoticeActivity extends AppCompatActivity {
 //            FragmentTransaction ft = fragmentManager.beginTransaction();
 //            Fragment currentFragment = fragmentManager.findFragmentByTag("News" + position);
 //            if (currentFragment == null) {
-            NewsFragment fragment = new NewsFragment();
-            Bundle args = new Bundle();
-            args.putInt("id", position + 1);
-            args.putString("text", "班级通知");
-            fragment.setArguments(args);
-            return fragment;
+            //NoticeFragment fragment = new NoticeFragment();
+            //Bundle args = new Bundle();
+            //args.putInt("id", position + 1);
+            //args.putString("text", "班级通知");
+            //fragment.setArguments(args);
+            //return fragment;
 //                currentFragment = fragment;
 //                ft.add(R.id.container, currentFragment, "News" + position);
 //            }
@@ -154,18 +164,19 @@ public class NoticeActivity extends AppCompatActivity {
 //            ft.show(currentFragment);
 //            //lastFragment = currentFragment;
 //            ft.commit();
-////            NewsFragment fragment = new NewsFragment();
+////            NoticeFragment fragment = new NoticeFragment();
 ////            Bundle args = new Bundle();
 ////            args.putInt("id", position);
 ////            args.putString("text","班级通知");
 ////            fragment.setArguments(args);
 //            return currentFragment;
+            return list.get(position);
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 2;
+            return list.size();
         }
 
         @Override

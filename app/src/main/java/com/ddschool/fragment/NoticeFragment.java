@@ -11,22 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ddschool.R;
 import com.ddschool.activity.CityListActivity;
-import com.ddschool.activity.DetailsActivity;
 import com.ddschool.adapter.NewsAdapter;
 import com.ddschool.bean.NoticeList;
 import com.ddschool.bean.UserToken;
-import com.ddschool.lib.view.HeadListView;
-import com.ddschool.tools.Constants;
 import com.ddschool.ui.LoadingDialog;
 import com.ddschool.ui.UICommon;
 import com.ddschool.widget.XListView;
@@ -43,18 +36,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class NewsFragment extends Fragment implements XListView.IXListViewListener {
-    private final static String TAG = "NewsFragment";
+public class NoticeFragment extends Fragment implements XListView.IXListViewListener {
+    private final static String TAG = "NoticeFragment";
     private LoadingDialog mDialog;
     Activity activity;
     ArrayList<NoticeList.NoticeListItem> newsList = new ArrayList<NoticeList.NoticeListItem>();
-    //HeadListView mListView;
     private XListView mListView;
     NewsAdapter mAdapter;
     String text;
     int channel_id;
-    ImageView detail_loading;
-    public final static int SET_NEWSLIST = 0;
     public final static int What_NoticList = 0x01;
     //Toast提示框
     private RelativeLayout notify_view;
@@ -79,30 +69,11 @@ public class NewsFragment extends Fragment implements XListView.IXListViewListen
         super.onAttach(activity);
     }
 
-    /**
-     * 此方法意思为fragment是否可见 ,可见时候加载数据
-     */
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (isVisibleToUser) {
-            //fragment可见时加载数据
-            if (newsList != null && newsList.size() != 0) {
-                handler.obtainMessage(What_NoticList).sendToTarget();
-            } else {
-                ThreadPoolUtils.execute(new NoticeRunnable());
-            }
-        } else {
-            //fragment不可见时不执行操作
-        }
-        super.setUserVisibleHint(isVisibleToUser);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // TODO Auto-generated method stub
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.news_fragment, null);
-        //mListView = (HeadListView) view.findViewById(R.id.mListView);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.notice_fragment, null);
         mListView = (XListView) view.findViewById(R.id.mListView);
         mListView.setPullRefreshEnable(true);
         mListView.setPullLoadEnable(true);
@@ -113,12 +84,10 @@ public class NewsFragment extends Fragment implements XListView.IXListViewListen
         mListView.setAdapter(mAdapter);
 
         TextView item_textview = (TextView) view.findViewById(R.id.item_textview);
-        detail_loading = (ImageView) view.findViewById(R.id.detail_loading);
         //Toast提示框
         notify_view = (RelativeLayout) view.findViewById(R.id.notify_view);
         notify_view_text = (TextView) view.findViewById(R.id.notify_view_text);
         item_textview.setText(text);
-
         return view;
     }
 
@@ -127,7 +96,6 @@ public class NewsFragment extends Fragment implements XListView.IXListViewListen
         * */
     @Override
     public void onRefresh() {
-        detail_loading.setVisibility(View.VISIBLE);
         mAdapter = null;
         pIndex = 1;
         ThreadPoolUtils.execute(new NoticeRunnable());
@@ -138,7 +106,6 @@ public class NewsFragment extends Fragment implements XListView.IXListViewListen
     * */
     @Override
     public void onLoadMore() {
-        detail_loading.setVisibility(View.VISIBLE);
         ThreadPoolUtils.execute(new NoticeRunnable());
     }
 
@@ -153,9 +120,7 @@ public class NewsFragment extends Fragment implements XListView.IXListViewListen
     }
 
     private void initData() {
-        //newsList = Constants.getNewsList();
-//        ThreadPoolUtils.execute(new NoticeRunnable());
-
+        ThreadPoolUtils.execute(new NoticeRunnable());
     }
 
     Handler handler = new Handler() {
@@ -185,8 +150,9 @@ public class NewsFragment extends Fragment implements XListView.IXListViewListen
                     if (RefreshNums < 1) {
                         Log.i(TAG, "RefreshNums");
                         UICommon.showTips(activity, R.mipmap.tips_smile, "已到最后一条数据");
+                    }else{
+                        initNotify();
                     }
-                    detail_loading.setVisibility(View.GONE);
                     break;
                 default:
                     break;
@@ -194,22 +160,6 @@ public class NewsFragment extends Fragment implements XListView.IXListViewListen
             super.handleMessage(msg);
         }
     };
-
-    /* 初始化选择城市的header*/
-    public void initCityChannel() {
-        View headview = LayoutInflater.from(activity).inflate(R.layout.city_category_list_tip, null);
-        TextView chose_city_tip = (TextView) headview.findViewById(R.id.chose_city_tip);
-        chose_city_tip.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Intent intent = new Intent(activity, CityListActivity.class);
-                startActivity(intent);
-            }
-        });
-        mListView.addHeaderView(headview);
-    }
 
     /* 初始化通知栏目*/
     private void initNotify() {
