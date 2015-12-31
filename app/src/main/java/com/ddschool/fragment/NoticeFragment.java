@@ -1,7 +1,6 @@
 package com.ddschool.fragment;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,15 +8,12 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ddschool.R;
-import com.ddschool.activity.CityListActivity;
-import com.ddschool.adapter.NewsAdapter;
+import com.ddschool.adapter.NoticeAdapter;
 import com.ddschool.bean.NoticeList;
 import com.ddschool.bean.UserToken;
 import com.ddschool.ui.LoadingDialog;
@@ -42,7 +38,7 @@ public class NoticeFragment extends Fragment implements XListView.IXListViewList
     Activity activity;
     ArrayList<NoticeList.NoticeListItem> newsList = new ArrayList<NoticeList.NoticeListItem>();
     private XListView mListView;
-    NewsAdapter mAdapter;
+    NoticeAdapter mAdapter;
     String text;
     int channel_id;
     public final static int What_NoticList = 0x01;
@@ -80,7 +76,7 @@ public class NoticeFragment extends Fragment implements XListView.IXListViewList
         mListView.setAutoLoadEnable(true);
         mListView.setXListViewListener(this);
         mListView.setRefreshTime(getTime());
-        mAdapter = new NewsAdapter(activity, newsList);
+        mAdapter = new NoticeAdapter(activity, newsList);
         mListView.setAdapter(mAdapter);
 
         TextView item_textview = (TextView) view.findViewById(R.id.item_textview);
@@ -136,7 +132,7 @@ public class NoticeFragment extends Fragment implements XListView.IXListViewList
                         if (mAdapter == null) {
                             newsList.clear();
                             newsList = noticeList.getData();
-                            mAdapter = new NewsAdapter(activity, newsList);
+                            mAdapter = new NoticeAdapter(activity, newsList);
                             mListView.setAdapter(mAdapter);
 
                         } else {//添加

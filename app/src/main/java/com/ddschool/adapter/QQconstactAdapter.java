@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class QQconstactAdapter extends BaseAdapter {
-	protected static final String TAG = "NewsAdapter";
+	protected static final String TAG = "NoticeAdapter";
 	private Context mContext;
 	private List<RecentChat> lists;
 	private CustomListView mCustomListView;

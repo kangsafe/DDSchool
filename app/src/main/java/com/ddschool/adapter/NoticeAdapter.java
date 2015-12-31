@@ -36,7 +36,7 @@ import java.util.List;
 
 //import com.ddschool.tools.DateTools;
 
-public class NewsAdapter extends BaseAdapter implements SectionIndexer, HeaderAdapter, OnScrollListener {
+public class NoticeAdapter extends BaseAdapter implements SectionIndexer, HeaderAdapter, OnScrollListener {
     ArrayList<NoticeList.NoticeListItem> newsList;
     Activity activity;
     LayoutInflater inflater = null;
@@ -47,7 +47,7 @@ public class NewsAdapter extends BaseAdapter implements SectionIndexer, HeaderAd
      */
     private PopupWindow popupWindow;
 
-    public NewsAdapter(Activity activity, ArrayList<NoticeList.NoticeListItem> newsList) {
+    public NoticeAdapter(Activity activity, ArrayList<NoticeList.NoticeListItem> newsList) {
         this.activity = activity;
         this.newsList = newsList;
         inflater = LayoutInflater.from(activity);
