@@ -1,5 +1,6 @@
 package com.ddschool.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.ddschool.R;
@@ -37,13 +39,31 @@ public class NoticeActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    private Button btnBack;
+    private Button btnAdd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        btnBack=(Button)findViewById(R.id.notice_btn_back);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent();
+                intent.setClass(NoticeActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        btnAdd=(Button)findViewById(R.id.notice_btn_add);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         for (int i = 0; i < 2; i++) {
