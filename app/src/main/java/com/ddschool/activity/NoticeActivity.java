@@ -61,7 +61,10 @@ public class NoticeActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent=new Intent();
+                intent.setClass(NoticeActivity.this,NoticeAddActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
         // Create the adapter that will return a fragment for each of the three

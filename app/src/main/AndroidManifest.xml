@@ -46,11 +46,11 @@
             android:value="XxK9mWcqjEWnWy48/0tDRg" />
 
         <activity
-            android:name=".SchoolLoginActivity"
-            android:label="@string/title_activity_school_login" />
-        <activity
             android:name=".activity.NoticeActivity"
             android:label="@string/title_activity_notice"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.NoticeAddActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
