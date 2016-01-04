@@ -69,4 +69,10 @@
         android:layout_height="match_parent"
         android:layout_below="@id/title"
         android:numColumns="4"/>
+    <View
+        android:id="@+id/picline"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/pic"
+        android:background="@color/devide_line" />
 </RelativeLayout>
