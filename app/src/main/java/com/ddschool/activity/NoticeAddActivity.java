@@ -1,6 +1,5 @@
 package com.ddschool.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,21 +7,23 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
@@ -82,7 +83,7 @@ public class NoticeAddActivity extends AppCompatActivity {
                 .findViewById(R.id.item_popupwindows_Photo);
         Button bt3 = (Button) view
                 .findViewById(R.id.item_popupwindows_cancel);
-        parent.setOnClickListener(new View.OnClickListener() {
+        parent.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -92,7 +93,7 @@ public class NoticeAddActivity extends AppCompatActivity {
             }
         });
         //拍照上传
-        bt1.setOnClickListener(new View.OnClickListener() {
+        bt1.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 photo();
                 pop.dismiss();
@@ -100,7 +101,7 @@ public class NoticeAddActivity extends AppCompatActivity {
             }
         });
         //从相册中选取
-        bt2.setOnClickListener(new View.OnClickListener() {
+        bt2.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(NoticeAddActivity.this,
                         AlbumActivity.class);
@@ -111,7 +112,7 @@ public class NoticeAddActivity extends AppCompatActivity {
             }
         });
         //取消
-        bt3.setOnClickListener(new View.OnClickListener() {
+        bt3.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 pop.dismiss();
                 ll_popup.clearAnimation();
@@ -123,7 +124,7 @@ public class NoticeAddActivity extends AppCompatActivity {
         adapter = new GridAdapter(this);
         adapter.update();
         noScrollgridview.setAdapter(adapter);
-        noScrollgridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        noScrollgridview.setOnItemClickListener(new OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                     long arg3) {
@@ -148,7 +149,6 @@ public class NoticeAddActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("HandlerLeak")
     public class GridAdapter extends BaseAdapter {
         private LayoutInflater inflater;
         private int selectedPosition = -1;
