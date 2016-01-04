@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -130,6 +131,11 @@ public class NoticeAddActivity extends AppCompatActivity {
                     Log.i("ddddddd", "----------");
                     ll_popup.startAnimation(AnimationUtils.loadAnimation(NoticeAddActivity.this, R.anim.activity_translate_in));
                     pop.showAtLocation(parentView, Gravity.BOTTOM, 0, 0);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    boolean isOpen = imm.isActive();//isOpen若返回true，则表示输入法打开
+                    if (isOpen) {
+                        imm.hideSoftInputFromWindow(arg1.getWindowToken(), 0); //强制隐藏键盘
+                    }
                 } else {
                     Intent intent = new Intent(NoticeAddActivity.this,
                             GalleryActivity.class);
