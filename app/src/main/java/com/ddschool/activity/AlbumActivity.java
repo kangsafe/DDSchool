@@ -102,7 +102,7 @@ public class AlbumActivity extends Activity {
     private class AlbumSendListener implements OnClickListener {
         public void onClick(View v) {
             overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-            intent.setClass(mContext, MainActivity.class);
+            intent.setClass(mContext, NoticeAddActivity.class);
             startActivity(intent);
             finish();
         }
@@ -121,7 +121,7 @@ public class AlbumActivity extends Activity {
     private class CancelListener implements OnClickListener {
         public void onClick(View v) {
             Bimp.tempSelectBitmap.clear();
-            intent.setClass(mContext, MainActivity.class);
+            intent.setClass(mContext, NoticeAddActivity.class);
             startActivity(intent);
         }
     }
