@@ -27,7 +27,6 @@ import com.ddschool.adapter.AlbumGridViewAdapter;
 import com.ddschool.utils.AlbumHelper;
 import com.ddschool.utils.Bimp;
 import com.ddschool.utils.ImageBucket;
-import com.ddschool.utils.ImageFile;
 import com.ddschool.utils.ImageItem;
 import com.ddschool.utils.PublicWay;
 import com.ddschool.utils.Res;

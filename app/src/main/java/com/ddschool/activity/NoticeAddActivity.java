@@ -90,6 +90,7 @@ public class NoticeAddActivity extends AppCompatActivity {
                 ll_popup.clearAnimation();
             }
         });
+        //拍照上传
         bt1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 photo();
@@ -97,6 +98,7 @@ public class NoticeAddActivity extends AppCompatActivity {
                 ll_popup.clearAnimation();
             }
         });
+        //从相册中选取
         bt2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(NoticeAddActivity.this,
@@ -107,6 +109,7 @@ public class NoticeAddActivity extends AppCompatActivity {
                 ll_popup.clearAnimation();
             }
         });
+        //取消
         bt3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 pop.dismiss();

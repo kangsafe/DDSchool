@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ddschool.activity.AlbumActivity;
-import com.ddschool.utils.ShowAllPhoto;
+import com.ddschool.activity.ShowAllPhoto;
 import com.ddschool.utils.BitmapCache;
 import com.ddschool.utils.BitmapCache.ImageCallback;
 import com.ddschool.utils.ImageItem;

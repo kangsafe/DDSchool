@@ -1,4 +1,4 @@
-package com.ddschool.utils;
+package com.ddschool.activity;
 
 import java.util.ArrayList;
 
@@ -19,8 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.ddschool.activity.GalleryActivity;
-import com.ddschool.activity.NoticeAddActivity;
 import com.ddschool.adapter.AlbumGridViewAdapter;
 import com.ddschool.utils.Bimp;
 import com.ddschool.utils.ImageItem;

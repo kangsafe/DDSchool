@@ -20,10 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ddschool.utils.Bimp;
-import com.ddschool.utils.ImageFile;
 import com.ddschool.utils.PublicWay;
 import com.ddschool.utils.Res;
-import com.ddschool.utils.ShowAllPhoto;
 import com.ddschool.zoom.PhotoView;
 import com.ddschool.zoom.ViewPagerFixed;
 
