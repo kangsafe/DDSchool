@@ -25,7 +25,7 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WelcomeActivity extends Activity {
+public class WelcomeActivity extends BaseActivity {
     private long mSplashDelay = 2000;
     private static final int What_Token = 0x01;
     private SharedPreferences mySharedPreferences;

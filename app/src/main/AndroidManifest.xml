@@ -8,16 +8,16 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <!--拍照-->
+    <!-- 拍照 -->
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <!--JPUSH-->
+    <!-- JPUSH -->
     <permission
         android:name="${applicationId}.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
-    <!-- Required  一些系统要求的权限，如访问网络等-->
+    <!-- Required  一些系统要求的权限，如访问网络等 -->
     <uses-permission android:name="${applicationId}.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -39,12 +39,12 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <application
+        android:name=".app.BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="com.ddschool.app.BaseApplication">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activity.WelcomeActivity"
             android:label="@string/app_name"
@@ -67,8 +67,6 @@
         <activity
             android:name=".activity.WiFiActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
-
         <activity
             android:name=".activity.NoticeActivity"
             android:label="@string/title_activity_notice"
@@ -76,15 +74,14 @@
         <activity
             android:name=".activity.NoticeAddActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".activity.AlbumActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.ImageFile" />
         <activity android:name=".activity.ShowAllPhoto" />
         <activity android:name=".activity.GalleryActivity" />
-        <!--JPush Start-->
-        <!-- Required SDK核心功能-->
+        <!-- JPush Start -->
+        <!-- Required SDK核心功能 -->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -97,12 +94,12 @@
                 <category android:name="${applicationId}" />
             </intent-filter>
         </activity>
-        <!-- Required  SDK核心功能-->
+        <!-- Required  SDK核心功能 -->
         <service
             android:name="cn.jpush.android.service.DownloadService"
             android:enabled="true"
-            android:exported="false"/>
-        <!-- Required SDK 核心功能-->
+            android:exported="false" />
+        <!-- Required SDK 核心功能 -->
         <!-- 可配置android:process参数将PushService放在其他进程中 -->
         <service
             android:name="cn.jpush.android.service.PushService"
@@ -123,18 +120,19 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.DaemonService" />
+
                 <category android:name="${applicationId}" />
             </intent-filter>
         </service>
 
-        <!-- Required SDK核心功能-->
+        <!-- Required SDK核心功能 -->
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
-                <!--Required  显示通知栏 -->
+                <!-- Required  显示通知栏 -->
                 <category android:name="${applicationId}" />
             </intent-filter>
             <intent-filter>
@@ -150,34 +148,33 @@
             </intent-filter>
         </receiver>
 
-        <!-- Required SDK核心功能-->
+        <!-- Required SDK核心功能 -->
         <receiver
             android:name="cn.jpush.android.service.AlarmReceiver"
             android:exported="false" />
 
-        <!-- User defined.  For test only  用户自定义的广播接收器-->
+        <!-- User defined.  For test only  用户自定义的广播接收器 -->
         <receiver
-            android:name="com.ddschool.jpush.JPushReceiver"
+            android:name=".jpush.JPushReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.REGISTRATION" />
-                <!--Required  用户注册SDK的intent-->
+                <!-- Required  用户注册SDK的intent -->
                 <action android:name="cn.jpush.android.intent.UNREGISTRATION" />
                 <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
-                <!--Required  用户接收SDK消息的intent-->
+                <!-- Required  用户接收SDK消息的intent -->
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
-                <!--Required  用户接收SDK通知栏信息的intent-->
+                <!-- Required  用户接收SDK通知栏信息的intent -->
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
-                <!--Required  用户打开自定义通知栏的intent-->
+                <!-- Required  用户打开自定义通知栏的intent -->
                 <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" />
-                <!--Optional 用户接受Rich Push Javascript 回调函数的intent-->
+                <!-- Optional 用户接受Rich Push Javascript 回调函数的intent -->
                 <action android:name="cn.jpush.android.intent.CONNECTION" />
                 <!-- 接收网络变化 连接/断开 since 1.6.3 -->
                 <category android:name="${applicationId}" />
             </intent-filter>
         </receiver>
-
 
         <!-- Required  . Enable it you can get statistics data with channel -->
         <meta-data
@@ -186,14 +183,16 @@
         <meta-data
             android:name="JPUSH_APPKEY"
             android:value="88af5c1fe82782cfcefc7514" />
-        <!--  </>值来自开发者平台取得的AppKey-->
-        <!--JPush End-->
+        <!-- </>值来自开发者平台取得的AppKey -->
+        <!-- JPush End -->
         <meta-data
             android:name="DDSchool_AppId"
             android:value="AOQHAKjBwcQA" />
         <meta-data
             android:name="DDSchool_AppSecret"
             android:value="XxK9mWcqjEWnWy48/0tDRg" />
+
+        <activity android:name=".activity.BaseActivity"></activity>
     </application>
 
 </manifest>

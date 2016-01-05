@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.ddschool.app"
+        applicationId "com.ddschool"
         minSdkVersion 13
         targetSdkVersion 23
         versionCode 1
@@ -23,6 +23,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    sourceSets.main {
+        jniLibs.srcDirs = ['libs']  // <-- Set your folder here!
     }
 }
 
