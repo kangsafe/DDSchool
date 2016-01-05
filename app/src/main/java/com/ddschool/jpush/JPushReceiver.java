@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.ddschool.activity.LoginActivity;
 import com.ddschool.activity.MainActivity;
 import com.ddschool.utils.JPushUtil;
 
@@ -103,16 +104,16 @@ public class JPushReceiver extends BroadcastReceiver {
 	
 	//send msg to MainActivity
 	private void processCustomMessage(Context context, Bundle bundle) {
-		if (MainActivity.isForeground) {
+		if (LoginActivity.isForeground) {
 			String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
 			String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
-			Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
-			msgIntent.putExtra(MainActivity.KEY_MESSAGE, message);
+			Intent msgIntent = new Intent(LoginActivity.MESSAGE_RECEIVED_ACTION);
+			msgIntent.putExtra(LoginActivity.KEY_MESSAGE, message);
 			if (!JPushUtil.isEmpty(extras)) {
 				try {
 					JSONObject extraJson = new JSONObject(extras);
 					if (null != extraJson && extraJson.length() > 0) {
-						msgIntent.putExtra(MainActivity.KEY_EXTRAS, extras);
+						msgIntent.putExtra(LoginActivity.KEY_EXTRAS, extras);
 					}
 				} catch (JSONException e) {
 
