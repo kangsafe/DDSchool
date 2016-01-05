@@ -29,7 +29,7 @@ public class UserInfo extends BwResult {
         this.data = data;
     }
 
-    private class UserInfoData extends BaseUserInfo {
+    public class UserInfoData extends BaseUserInfo {
 
         private List<UserRole> roles;
         private List<UserClass> classes;

@@ -1,8 +1,13 @@
 package com.ddschool.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -14,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -29,8 +35,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ddschool.R;
+import com.ddschool.bean.UserInfo;
 import com.ddschool.fragment.ConstactFatherFragment;
 import com.ddschool.fragment.SchoolFragment;
+import com.ddschool.ui.UICommon;
+import com.ddschool.utils.JPushUtil;
+
+import java.util.Set;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -54,11 +68,21 @@ public class MainActivity extends AppCompatActivity
     private PopupWindow mPopupWindow;
     private LinearLayout buttomBarGroup;
 
+    public static boolean isForeground = false;
+    //for receive customer msg from jpush server
+    private MessageReceiver mMessageReceiver;
+    public static final String MESSAGE_RECEIVED_ACTION = "com.ddschool.jpush.MESSAGE_RECEIVED_ACTION";
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_MESSAGE = "message";
+    public static final String KEY_EXTRAS = "extras";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i("等MainActivity", "123");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //JPUSh
+        registerMessageReceiver();  // used for receive msg
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -119,7 +143,7 @@ public class MainActivity extends AppCompatActivity
         });
         btnSchool.performClick();
 
-        mPopupWindow=new PopupWindow(mPopView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        mPopupWindow = new PopupWindow(mPopView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
 
         app_cancle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,6 +168,135 @@ public class MainActivity extends AppCompatActivity
                 finish();
             }
         });
+    }
+
+
+    public void registerMessageReceiver() {
+        mMessageReceiver = new MessageReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+        filter.addAction(MESSAGE_RECEIVED_ACTION);
+        registerReceiver(mMessageReceiver, filter);
+        setAlias();
+    }
+    private void setAlias(){
+        String alias = UserInfo.getInstance().getData().getUserid();
+        if (TextUtils.isEmpty(alias)) {
+            Toast.makeText(MainActivity.this,"别名为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!JPushUtil.isValidTagAndAlias(alias)) {
+            Toast.makeText(MainActivity.this,"标签为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //调用JPush API设置Alias
+        mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, alias));
+    }
+    private static final int MSG_SET_ALIAS = 1001;
+    private static final int MSG_SET_TAGS = 1002;
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case MSG_SET_ALIAS:
+                    Log.d(TAG, "Set alias in handler.");
+                    JPushInterface.setAliasAndTags(getApplicationContext(), (String) msg.obj, null, mAliasCallback);
+                    break;
+
+                case MSG_SET_TAGS:
+                    Log.d(TAG, "Set tags in handler.");
+                    JPushInterface.setAliasAndTags(getApplicationContext(), null, (Set<String>) msg.obj, mTagsCallback);
+                    break;
+
+                default:
+                    Log.i(TAG, "Unhandled msg - " + msg.what);
+            }
+        }
+    };
+
+    private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
+
+        @Override
+        public void gotResult(int code, String alias, Set<String> tags) {
+            String logs ;
+            switch (code) {
+                case 0:
+                    logs = "Set tag and alias success";
+                    Log.i(TAG, logs);
+                    break;
+
+                case 6002:
+                    logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
+                    Log.i(TAG, logs);
+                    if (JPushUtil.isConnected(getApplicationContext())) {
+                        mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
+                    } else {
+                        Log.i(TAG, "No network");
+                    }
+                    break;
+
+                default:
+                    logs = "Failed with errorCode = " + code;
+                    Log.e(TAG, logs);
+            }
+
+            JPushUtil.showToast(logs, getApplicationContext());
+        }
+
+    };
+
+    private final TagAliasCallback mTagsCallback = new TagAliasCallback() {
+
+        @Override
+        public void gotResult(int code, String alias, Set<String> tags) {
+            String logs ;
+            switch (code) {
+                case 0:
+                    logs = "Set tag and alias success";
+                    Log.i(TAG, logs);
+                    break;
+
+                case 6002:
+                    logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
+                    Log.i(TAG, logs);
+                    if (JPushUtil.isConnected(getApplicationContext())) {
+                        mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_TAGS, tags), 1000 * 60);
+                    } else {
+                        Log.i(TAG, "No network");
+                    }
+                    break;
+
+                default:
+                    logs = "Failed with errorCode = " + code;
+                    Log.e(TAG, logs);
+            }
+
+            JPushUtil.showToast(logs, getApplicationContext());
+        }
+
+    };
+
+    public class MessageReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (MESSAGE_RECEIVED_ACTION.equals(intent.getAction())) {
+                String messge = intent.getStringExtra(KEY_MESSAGE);
+                String extras = intent.getStringExtra(KEY_EXTRAS);
+                StringBuilder showMsg = new StringBuilder();
+                showMsg.append(KEY_MESSAGE + " : " + messge + "\n");
+                if (!JPushUtil.isEmpty(extras)) {
+                    showMsg.append(KEY_EXTRAS + " : " + extras + "\n");
+                }
+                setCostomMsg(showMsg.toString());
+            }
+        }
+    }
+
+    private void setCostomMsg(String msg) {
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
