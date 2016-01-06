@@ -38,6 +38,8 @@ public class BaseApplication extends Application {
                 R.layout.activity_login, R.id.icon, R.id.title, R.id.text);
         builder2.statusBarDrawable = R.mipmap.ic_launcher;      // 指定最顶层状态栏小图标
         builder2.layoutIconDrawable = R.mipmap.ic_launcher1;   // 指定下拉状态栏时显示的通知图标
-        JPushInterface.setPushNotificationBuilder(2, builder2);
+        builder2.notificationFlags=Notification.FLAG_ONLY_ALERT_ONCE;
+        builder2.notificationDefaults=Notification.DEFAULT_SOUND;
+        JPushInterface.setPushNotificationBuilder(3, builder2);
     }
 }
