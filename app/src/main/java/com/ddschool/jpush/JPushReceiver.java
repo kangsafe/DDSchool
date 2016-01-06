@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.ddschool.activity.LoginActivity;
+import com.ddschool.activity.NoticeActivity;
 import com.ddschool.utils.JPushUtil;
 
 import org.json.JSONException;
@@ -29,41 +30,35 @@ public class JPushReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
-		Log.d(TAG, "[MyReceiver] onReceive - " + intent.getAction() + ", extras: " + printBundle(bundle));
+		Log.d(TAG, "[JPushReceiver] onReceive - " + intent.getAction() + ", extras: " + printBundle(bundle));
 		
         if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
             String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
-            Log.d(TAG, "[MyReceiver] 接收Registration Id : " + regId);
+            Log.d(TAG, "[JPushReceiver] 接收Registration Id : " + regId);
             //send the Registration Id to your server...
                         
         } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
-        	Log.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
+        	Log.d(TAG, "[JPushReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
         	processCustomMessage(context, bundle);
         
         } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
-            Log.d(TAG, "[MyReceiver] 接收到推送下来的通知");
+            Log.d(TAG, "[JPushReceiver] 接收到推送下来的通知");
             int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
-            Log.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
+            Log.d(TAG, "[JPushReceiver] 接收到推送下来的通知的ID: " + notifactionId);
         	
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
-            Log.d(TAG, "[MyReceiver] 用户点击打开了通知");
-            
-        	//打开自定义的Activity
-        	Intent i = new Intent(context, LoginActivity.class);
-        	i.putExtras(bundle);
-        	//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        	i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
-        	context.startActivity(i);
+            Log.d(TAG, "[JPushReceiver] 用户点击打开了通知");
+            openNotification(context, bundle);
         	
         } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
-            Log.d(TAG, "[MyReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
+            Log.d(TAG, "[JPushReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
             //在这里根据 JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity， 打开一个网页等..
         	
         } else if(JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction())) {
         	boolean connected = intent.getBooleanExtra(JPushInterface.EXTRA_CONNECTION_CHANGE, false);
-        	Log.w(TAG, "[MyReceiver]" + intent.getAction() +" connected state change to "+connected);
+        	Log.w(TAG, "[JPushReceiver]" + intent.getAction() +" connected state change to "+connected);
         } else {
-        	Log.d(TAG, "[MyReceiver] Unhandled intent - " + intent.getAction());
+        	Log.d(TAG, "[JPushReceiver] Unhandled intent - " + intent.getAction());
         }
 	}
 
@@ -120,6 +115,35 @@ public class JPushReceiver extends BroadcastReceiver {
 
 			}
 			context.sendBroadcast(msgIntent);
+		}
+	}
+	private void openNotification(Context context, Bundle bundle){
+		String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
+		String myValue = "";
+		try {
+			JSONObject extrasJson = new JSONObject(extras);
+			myValue = extrasJson.optString("module");
+		} catch (Exception e) {
+			Log.w(TAG, "Unexpected: extras is not a valid json", e);
+			return;
+		}
+		switch (myValue){
+			case "0"://系统消息
+				//打开自定义的Activity
+				Intent i = new Intent(context, LoginActivity.class);
+				i.putExtras(bundle);
+				//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
+				context.startActivity(i);
+				break;
+			case "1"://通知公告
+				Intent notice = new Intent(context, NoticeActivity.class);
+				notice.putExtras(bundle);
+				//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				notice.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
+				context.startActivity(notice);
+				break;
+			default:break;
 		}
 	}
 }
