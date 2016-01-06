@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import cn.jpush.android.api.InstrumentedActivity;
 import cn.jpush.android.api.JPushInterface;
 
-public class BaseActivity extends Activity {
+public class BaseActivity extends InstrumentedActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,13 +19,13 @@ public class BaseActivity extends Activity {
     protected void onResume() {
         super.onResume();
         //JPush统计
-        JPushInterface.onResume(this.getApplicationContext());
+        JPushInterface.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         //JPush统计
-        JPushInterface.onPause(this.getApplicationContext());
+        JPushInterface.onPause(this);
     }
 }

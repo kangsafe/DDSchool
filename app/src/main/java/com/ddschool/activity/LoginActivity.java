@@ -44,7 +44,7 @@ import java.util.List;
 
 //import com.imsdk.imdeveloper.app.IMApplication;
 
-public class LoginActivity extends Activity implements OnClickListener {
+public class LoginActivity extends BaseActivity implements OnClickListener {
     private SharedPreferences mySharedPreferences;
     private final int What_Login = 0x01;
     private final int What_Reg = 0x02;
