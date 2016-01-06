@@ -113,55 +113,13 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
     }
 
     private void initListener() {
-
         mLoginBtn.setOnClickListener(this);
         mRegisterBtn.setOnClickListener(this);
-
-
-//		IMMyself.init(
-//				new OnAutoLoginListener() {
-//					@Override
-//					public void onAutoLoginBegan() {
-//						Uri uri = IMSDKMainPhoto.getLocalUri(IMMyself.getCustomUserID());
-//
-//						if (uri != null) {
-//							IMApplication.sImageLoader.displayImage(uri.toString(),
-//									mImageView, IMApplication.sDisplayImageOptions);
-//						}
-//
-//						mLoginBtn.setEnabled(false);
-//
-//						mUserNameEditText.setText(IMMyself.getCustomUserID());
-//						mPasswordEditText.setText(IMMyself.getPassword());
-//
-//						mDialog = new LoadingDialog(LoginActivity.this, "正在登录...");
-//						mDialog.setCancelable(false);
-//						mDialog.show();
-//					}
-//
-//					@Override
-//					public void onAutoLoginSuccess() {
-//						UICommon.showTips(LoginActivity.this, R.drawable.tips_smile, "登录成功");
-//						updateStatus(SUCCESS);
-//					}
-//
-//					@Override
-//					public void onAutoLoginFailure(boolean conflict) {
-//						if (conflict) {
-//							UICommon.showTips(LoginActivity.this, R.drawable.tips_error, "登录冲突");
-//						} else {
-//							UICommon.showTips(LoginActivity.this, R.drawable.tips_error, "登录失败");
-//						}
-//
-//						updateStatus(FAILURE);
-//					}
-//				});
     }
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            Gson g = new Gson();
             Log.i("What", "what=" + msg.what + ",json=" + msg.obj);
             switch (msg.what) {
                 case What_Login:
@@ -237,9 +195,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         @Override
         public void run() {
             try {
-//                if (UserToken.getAccessToken().length() < 1) {
-//                    ThreadPoolUtils.execute(new TokenRunnable());
-//                }
                 Log.d("AccessToken", UserToken.getInstance(getApplicationContext()).getAccessToken());
                 List<NameValuePair> list = new ArrayList<NameValuePair>();
                 list.add(new BasicNameValuePair("phone", mUserNameEditText
@@ -266,42 +221,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
     private void login() {
         ThreadPoolUtils.execute(new LoginRunnable());
-//		boolean result = IMMyself.setCustomUserID(mUserNameEditText.getText()
-//				.toString());
-
-//		if (!result) {
-//			UICommon.showTips(LoginActivity.this, R.drawable.tips_warning, IMSDK.getLastError());
-//			mDialog.dismiss();
-//			return;
-//		}
-
-//		result = IMMyself.setPassword(mPasswordEditText.getText().toString());
-//
-//		if (!result) {
-//			showTips(R.drawable.tips_warning, IMSDK.getLastError());
-//			mDialog.dismiss();
-//			return;
-//		}
-//
-//		IMMyself.login(false, 5, new OnActionListener() {
-//			@Override
-//			public void onSuccess() {
-//        UICommon.showTips(LoginActivity.this, R.mipmap.tips_smile, "登录成功");
-//         updateStatus(SUCCESS);
-//			}
-//
-//			@Override
-//			public void onFailure(String error) {
-//				if (error.equals("Timeout")) {
-//					error = "登录超时";
-//				} else if (error.equals("Wrong Password")) {
-//					error = "密码错误";
-//				}
-//
-//				updateStatus(FAILURE);
-//				UICommon.showTips(LoginActivity.this, R.drawable.tips_error, error);
-//			}
-//		});
     }
 
     @Override
