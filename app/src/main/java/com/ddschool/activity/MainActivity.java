@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity
     private PopupWindow mPopupWindow;
     private LinearLayout buttomBarGroup;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i("等MainActivity", "123");
@@ -161,6 +160,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
+
 
 
 
