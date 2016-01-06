@@ -19,13 +19,13 @@ public class BaseActivity extends InstrumentedActivity {
     protected void onResume() {
         super.onResume();
         //JPush统计
-        JPushInterface.onResume(this);
+        //JPushInterface.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         //JPush统计
-        JPushInterface.onPause(this);
+//        JPushInterface.onPause(this);
     }
 }
