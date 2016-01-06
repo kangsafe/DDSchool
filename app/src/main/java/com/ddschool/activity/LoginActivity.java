@@ -92,7 +92,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         //layout
         setContentView(R.layout.activity_login);
         //JPUSh
-        registerMessageReceiver();  // used for receive msg
+        //registerMessageReceiver();  // used for receive msg
         initView();
         initListener();
     }
