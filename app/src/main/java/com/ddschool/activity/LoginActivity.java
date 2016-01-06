@@ -56,7 +56,8 @@ import cn.jpush.android.api.TagAliasCallback;
 
 //import com.imsdk.imdeveloper.app.IMApplication;
 
-public class LoginActivity extends Activity implements OnClickListener {
+public class LoginActivity extends BaseActivity implements OnClickListener {
+    private static final String TAG = "LoginActivity";
     private SharedPreferences mySharedPreferences;
     private final int What_Login = 0x01;
     private final int What_Reg = 0x02;
@@ -77,6 +78,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     private static TipsToast mTipsToast;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +87,8 @@ public class LoginActivity extends Activity implements OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         //layout
         setContentView(R.layout.activity_login);
-
+        //JPUSh
+        registerMessageReceiver();  // used for receive msg
         initView();
         initListener();
     }
@@ -163,8 +166,10 @@ public class LoginActivity extends Activity implements OnClickListener {
             switch (msg.what) {
                 case What_Login:
                     UserInfo info = (UserInfo) msg.obj;
-                    if (info.getErrcode() == 0) {
+
+                    if (info != null && info.getErrcode() == 0) {
                         Log.d("Token", info.toString());
+                        setAliasAndTags(info);
                         updateStatus(SUCCESS);
                     } else {
                         updateStatus(FAILURE);
@@ -299,22 +304,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 //		});
     }
 
-
-//    private void showTips(int iconResId, String tips) {
-//        if (mTipsToast != null) {
-//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-//                mTipsToast.cancel();
-//            }
-//        } else {
-//            mTipsToast = TipsToast.makeText(getApplication().getBaseContext(), tips,
-//                    TipsToast.LENGTH_SHORT);
-//        }
-//
-//        mTipsToast.show();
-//        mTipsToast.setIcon(iconResId);
-//        mTipsToast.setText(tips);
-//    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -357,14 +346,6 @@ public class LoginActivity extends Activity implements OnClickListener {
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-//			Uri uri = IMSDKMainPhoto.getLocalUri(s.toString());
-//
-//			if (uri != null) {
-//				IMApplication.sImageLoader.displayImage(uri.toString(), mImageView,
-//						IMApplication.sDisplayImageOptions);
-//			} else {
-//				mImageView.setImageResource(R.drawable.icon);
-//			}
         }
     };
 
