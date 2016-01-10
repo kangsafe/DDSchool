@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.ddschool.tools.AccessToken;
+
 public class UserToken {
     private static String AccessToken;
     private static int Timeout;
@@ -23,8 +25,8 @@ public class UserToken {
     }
 
     public static String getAccessToken() {
-        if (AccessToken.isEmpty()) {
-            mySharedPreferences = mContext.getSharedPreferences("UserToken", Activity.MODE_PRIVATE);
+        if (AccessToken==null || AccessToken.isEmpty()) {
+            mySharedPreferences = mContext.getSharedPreferences("DDSchool", Activity.MODE_PRIVATE);
             AccessToken = mySharedPreferences.getString("AccessToken", "");
             Timeout = mySharedPreferences.getInt("Timeout", 0);
         }

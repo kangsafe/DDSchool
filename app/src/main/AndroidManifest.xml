@@ -192,7 +192,8 @@
             android:name="DDSchool_AppSecret"
             android:value="XxK9mWcqjEWnWy48/0tDRg" />
 
-        <activity android:name=".activity.BaseActivity"/>
+        <activity android:name=".activity.BaseActivity" />
+        <activity android:name=".activity.NoticeDetailActivity"></activity>
     </application>
 
 </manifest>

@@ -13,10 +13,10 @@ public class NewsDetailsService {
 		Document document = null;
 		String data = "<body>" +
 				"<center><h2 style='font-size:16px;'>" + news_title + "</h2></center>";
-		data = data + "<p align='left' style='margin-left:10px'>" 
-				+ "<span style='font-size:10px;'>" 
+		data = data + "<p align='left' style='margin-left:10px'>"
+				+ "<span style='font-size:10px;'>"
 				+ news_date
-				+ "</span>" 
+				+ "</span>"
 				+ "</p>";
 		data = data + "<hr size='1' />";
 		try {

@@ -22,7 +22,7 @@ import com.ddschool.fragment.NoticeFragment;
 
 import java.util.ArrayList;
 
-public class NoticeActivity extends AppCompatActivity {
+public class NoticeActivity extends BaseUserActivity {
     private ArrayList<Fragment> fragmentList = new ArrayList<Fragment>();
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -55,6 +55,8 @@ public class NoticeActivity extends AppCompatActivity {
                 intent.setClass(NoticeActivity.this,MainActivity.class);
                 startActivity(intent);
                 finish();
+                overridePendingTransition(R.anim.slide_in_left,
+                        R.anim.slide_out_right);
             }
         });
         btnAdd=(Button)findViewById(R.id.notice_btn_add);

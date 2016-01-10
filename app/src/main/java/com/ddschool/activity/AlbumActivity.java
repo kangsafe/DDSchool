@@ -1,8 +1,5 @@
 package com.ddschool.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,14 +7,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -30,6 +25,9 @@ import com.ddschool.utils.ImageBucket;
 import com.ddschool.utils.ImageItem;
 import com.ddschool.utils.PublicWay;
 import com.ddschool.utils.Res;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 这个是进入相册显示所有图片的界面
@@ -159,34 +157,33 @@ public class AlbumActivity extends Activity {
 
     private void initListener() {
 
-        gridImageAdapter
-                .setOnItemClickListener(new AlbumGridViewAdapter.OnItemClickListener() {
+        gridImageAdapter.setOnItemClickListener(new AlbumGridViewAdapter.OnItemClickListener() {
 
-                    @Override
-                    public void onItemClick(final ToggleButton toggleButton,
-                                            int position, boolean isChecked, Button chooseBt) {
-                        if (Bimp.tempSelectBitmap.size() >= PublicWay.num) {
-                            toggleButton.setChecked(false);
-                            chooseBt.setVisibility(View.GONE);
-                            if (!removeOneData(dataList.get(position))) {
-                                Toast.makeText(AlbumActivity.this, Res.getString("only_choose_num"),
-                                        Toast.LENGTH_LONG).show();
-                            }
-                            return;
-                        }
-                        if (isChecked) {
-                            chooseBt.setVisibility(View.VISIBLE);
-                            Bimp.tempSelectBitmap.add(dataList.get(position));
-                            okButton.setText(Res.getString("finish") + "(" + Bimp.tempSelectBitmap.size()
-                                    + "/" + PublicWay.num + ")");
-                        } else {
-                            Bimp.tempSelectBitmap.remove(dataList.get(position));
-                            chooseBt.setVisibility(View.GONE);
-                            okButton.setText(Res.getString("finish") + "(" + Bimp.tempSelectBitmap.size() + "/" + PublicWay.num + ")");
-                        }
-                        isShowOkBt();
+            @Override
+            public void onItemClick(final ToggleButton toggleButton,
+                                    int position, boolean isChecked, Button chooseBt) {
+                if (Bimp.tempSelectBitmap.size() >= PublicWay.num) {
+                    toggleButton.setChecked(false);
+                    chooseBt.setVisibility(View.GONE);
+                    if (!removeOneData(dataList.get(position))) {
+                        Toast.makeText(AlbumActivity.this, Res.getString("only_choose_num"),
+                                Toast.LENGTH_LONG).show();
                     }
-                });
+                    return;
+                }
+                if (isChecked) {
+                    chooseBt.setVisibility(View.VISIBLE);
+                    Bimp.tempSelectBitmap.add(dataList.get(position));
+                    okButton.setText(Res.getString("finish") + "(" + Bimp.tempSelectBitmap.size()
+                            + "/" + PublicWay.num + ")");
+                } else {
+                    Bimp.tempSelectBitmap.remove(dataList.get(position));
+                    chooseBt.setVisibility(View.GONE);
+                    okButton.setText(Res.getString("finish") + "(" + Bimp.tempSelectBitmap.size() + "/" + PublicWay.num + ")");
+                }
+                isShowOkBt();
+            }
+        });
 
         okButton.setOnClickListener(new AlbumSendListener());
 
@@ -208,16 +205,16 @@ public class AlbumActivity extends Activity {
             okButton.setPressed(true);
             preview.setClickable(true);
             okButton.setClickable(true);
-            okButton.setTextColor(Color.WHITE);
-            preview.setTextColor(Color.WHITE);
+            okButton.setTextColor(getResources().getColor(R.color.blue2));
+            preview.setTextColor(getResources().getColor(R.color.blue2));
         } else {
             okButton.setText(Res.getString("finish") + "(" + Bimp.tempSelectBitmap.size() + "/" + PublicWay.num + ")");
             preview.setPressed(false);
             preview.setClickable(false);
             okButton.setPressed(false);
             okButton.setClickable(false);
-            okButton.setTextColor(Color.parseColor("#E1E0DE"));
-            preview.setTextColor(Color.parseColor("#E1E0DE"));
+            okButton.setTextColor(getResources().getColor(R.color.gray));
+            preview.setTextColor(getResources().getColor(R.color.gray));
         }
     }
 

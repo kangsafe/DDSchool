@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ddschool.R;
+import com.ddschool.bean.BaseUserInfo;
 import com.ddschool.bean.UserInfo;
 import com.ddschool.fragment.ConstactFatherFragment;
 import com.ddschool.fragment.SchoolFragment;
@@ -46,7 +47,7 @@ import java.util.Set;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseUserActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
     private Fragment currentFragment;

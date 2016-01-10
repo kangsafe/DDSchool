@@ -39,7 +39,7 @@ import com.ddschool.utils.ImageItem;
 import com.ddschool.utils.PublicWay;
 import com.ddschool.utils.Res;
 
-public class NoticeAddActivity extends AppCompatActivity {
+public class NoticeAddActivity extends BaseUserActivity {
 
     private GridView noScrollgridview;
     private GridAdapter adapter;
@@ -47,6 +47,8 @@ public class NoticeAddActivity extends AppCompatActivity {
     private PopupWindow pop = null;
     private LinearLayout ll_popup;
     public static Bitmap bimap;
+    private Button btnCancle;
+    private Button btnPublish;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,17 @@ public class NoticeAddActivity extends AppCompatActivity {
 
     public void Init() {
 
+        btnCancle=(Button)findViewById(R.id.title_btn_left);
+        btnCancle.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(NoticeAddActivity.this,NoticeActivity.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.slide_in_left,
+                        R.anim.slide_out_right);
+            }
+        });
         pop = new PopupWindow(NoticeAddActivity.this);
 
         View view = getLayoutInflater().inflate(R.layout.item_popupwindows, null);

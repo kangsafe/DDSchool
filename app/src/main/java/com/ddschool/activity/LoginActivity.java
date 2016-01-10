@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -31,22 +30,16 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.ddschool.R;
+import com.ddschool.bean.BwConst;
 import com.ddschool.bean.UserInfo;
 import com.ddschool.bean.UserRole;
-import com.ddschool.bean.UserToken;
+import com.ddschool.service.LoginRunnable;
 import com.ddschool.ui.LoadingDialog;
 import com.ddschool.ui.TipsToast;
 import com.ddschool.ui.UICommon;
 import com.ddschool.utils.JPushUtil;
-import com.frame.common.HttpUtil;
-import com.frame.common.MD5Util;
 import com.frame.common.ThreadPoolUtils;
-import com.google.gson.Gson;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -58,9 +51,7 @@ import cn.jpush.android.api.TagAliasCallback;
 
 public class LoginActivity extends BaseActivity implements OnClickListener {
     private static final String TAG = "LoginActivity";
-    private SharedPreferences mySharedPreferences;
-    private final int What_Login = 0x01;
-    private final int What_Reg = 0x02;
+
     private EditText mUserNameEditText; // 帐号编辑框
     private EditText mPasswordEditText; // 密码编辑框
 
@@ -91,8 +82,16 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         registerMessageReceiver();  // used for receive msg
         initView();
         initListener();
+        initData();
     }
 
+    private void initData() {
+        mUserNameEditText.setText(mySharedPreferences.getString("userName", ""));
+        mPasswordEditText.setText(mySharedPreferences.getString("userpass", ""));
+        if (!mUserNameEditText.getText().toString().isEmpty() && !mPasswordEditText.getText().toString().isEmpty()) {
+            mLoginBtn.performClick();
+        }
+    }
 
     private void initView() {
 
@@ -105,14 +104,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
         mImageView = (ImageView) findViewById(R.id.login_imageview);
 
-        //设置默认用户名
-        mUserNameEditText.addTextChangedListener(mTextWatcher);
-        mySharedPreferences = getSharedPreferences("imsdk", Activity.MODE_PRIVATE);
-        mUserNameEditText.setText(mySharedPreferences.getString("userName", ""));
-        mPasswordEditText.setText(mySharedPreferences.getString("userpass", ""));
     }
 
     private void initListener() {
+        //设置默认用户名
+        mUserNameEditText.addTextChangedListener(mTextWatcher);
         mLoginBtn.setOnClickListener(this);
         mRegisterBtn.setOnClickListener(this);
     }
@@ -122,10 +118,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         public void handleMessage(Message msg) {
             Log.i("What", "what=" + msg.what + ",json=" + msg.obj);
             switch (msg.what) {
-                case What_Login:
+                case BwConst.What_Login:
                     UserInfo info = (UserInfo) msg.obj;
-
                     if (info != null && info.getErrcode() == 0) {
+                        userInfo = info.getData();
                         Log.d("Token", info.toString());
                         setAliasAndTags(info);
                         updateStatus(SUCCESS);
@@ -191,36 +187,38 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         }
     }
 
-    private class LoginRunnable implements Runnable {
-        @Override
-        public void run() {
-            try {
-                Log.d("AccessToken", UserToken.getInstance(getApplicationContext()).getAccessToken());
-                List<NameValuePair> list = new ArrayList<NameValuePair>();
-                list.add(new BasicNameValuePair("phone", mUserNameEditText
-                        .getText().toString()));
-                list.add(new BasicNameValuePair("password", MD5Util
-                        .getMD5String(mPasswordEditText.getText().toString())));
-                Log.d("MD5", MD5Util.getMD5String(mPasswordEditText.getText().toString()));
-                list.add(new BasicNameValuePair("access_token", UserToken.getInstance(getApplicationContext())
-                        .getAccessToken()));
-                Log.d("请求参数", list.toString());
-                String json = HttpUtil.sendPostRequest("http://schoolapi2.wo-ish.com/user/login", list);
-                Gson gson = new Gson();
-                UserInfo info = gson.fromJson(json, UserInfo.class);
-
-                Message msg = Message.obtain();
-                msg.what = What_Login;
-                msg.obj = info;
-                handler.sendMessage(msg);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
+//    private class LoginRunnable implements Runnable {
+//        @Override
+//        public void run() {
+//            try {
+//                Log.d("AccessToken", UserToken.getInstance(getApplicationContext()).getAccessToken());
+//                List<NameValuePair> list = new ArrayList<NameValuePair>();
+//                list.add(new BasicNameValuePair("phone", mUserNameEditText
+//                        .getText().toString()));
+//                list.add(new BasicNameValuePair("password", MD5Util
+//                        .getMD5String(mPasswordEditText.getText().toString())));
+//                Log.d("MD5", MD5Util.getMD5String(mPasswordEditText.getText().toString()));
+//                list.add(new BasicNameValuePair("access_token", UserToken.getInstance(getApplicationContext())
+//                        .getAccessToken()));
+//                Log.d("请求参数", list.toString());
+//                String json = HttpUtil.sendPostRequest("http://schoolapi2.wo-ish.com/user/login", list);
+//                Gson gson = new Gson();
+//                UserInfo info = gson.fromJson(json, UserInfo.class);
+//
+//                Message msg = Message.obtain();
+//                msg.what = What_Login;
+//                msg.obj = info;
+//                handler.sendMessage(msg);
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+//        }
+//    }
 
     private void login() {
-        ThreadPoolUtils.execute(new LoginRunnable());
+        ThreadPoolUtils.execute(new LoginRunnable(getApplicationContext(), handler,
+                mUserNameEditText.getText().toString(),
+                mPasswordEditText.getText().toString()));
     }
 
     @Override

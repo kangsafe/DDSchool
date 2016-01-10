@@ -1,6 +1,7 @@
 package com.ddschool.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,10 +10,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ddschool.R;
+import com.ddschool.activity.DetailsActivity;
+import com.ddschool.activity.LoginActivity;
+import com.ddschool.activity.NoticeDetailActivity;
 import com.ddschool.adapter.NoticeAdapter;
 import com.ddschool.bean.NoticeList;
 import com.ddschool.bean.UserToken;
@@ -75,6 +80,15 @@ public class NoticeFragment extends Fragment implements XListView.IXListViewList
         mListView.setPullLoadEnable(true);
         mListView.setAutoLoadEnable(true);
         mListView.setXListViewListener(this);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(activity, NoticeDetailActivity.class);
+                intent.putExtra("nid", mAdapter.getItem(position).getNid());
+                startActivity(intent);
+                activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        });
         mListView.setRefreshTime(getTime());
         mAdapter = new NoticeAdapter(activity, newsList);
         mListView.setAdapter(mAdapter);
@@ -146,7 +160,7 @@ public class NoticeFragment extends Fragment implements XListView.IXListViewList
                     if (RefreshNums < 1) {
                         Log.i(TAG, "RefreshNums");
                         UICommon.showTips(activity, R.mipmap.tips_smile, "已到最后一条数据");
-                    }else{
+                    } else {
                         initNotify();
                     }
                     break;

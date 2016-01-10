@@ -6,27 +6,20 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.ddschool.bean.BwConst;
 import com.ddschool.bean.BwToken;
 import com.ddschool.bean.UserInfo;
 import com.ddschool.bean.UserToken;
 import com.ddschool.service.TokenRunnable;
-import com.frame.common.HttpUtil;
 import com.frame.common.ThreadPoolUtils;
 import com.google.gson.Gson;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.jpush.android.api.InstrumentedActivity;
 
-public class BaseActivity extends InstrumentedActivity {
+public class BaseUserActivity extends AppCompatActivity {
     protected static String access_token;
     protected static UserInfo.UserInfoData userInfo;
     protected SharedPreferences mySharedPreferences;
@@ -39,6 +32,18 @@ public class BaseActivity extends InstrumentedActivity {
             access_token = UserToken.getInstance(getApplicationContext()).getAccessToken();
             if(access_token==null || access_token.isEmpty()){
                 ThreadPoolUtils.execute(new TokenRunnable(getApplicationContext(),handler));
+            }
+        }
+        if(userInfo==null){
+            String info=mySharedPreferences.getString("UserInfo", "");
+            if(info.isEmpty()) {
+                Intent intent=new Intent(BaseUserActivity.this,LoginActivity.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(android.R.anim.fade_in,
+                        android.R.anim.fade_out);
+            }else{
+                userInfo = new Gson().fromJson(info, UserInfo.UserInfoData.class);
             }
         }
     }
