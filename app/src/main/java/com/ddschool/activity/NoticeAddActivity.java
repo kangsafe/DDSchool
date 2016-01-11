@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -34,10 +33,16 @@ import android.widget.RelativeLayout;
 
 import com.ddschool.R;
 import com.ddschool.utils.Bimp;
+import com.ddschool.utils.FileHelper;
 import com.ddschool.utils.FileUtils;
 import com.ddschool.utils.ImageItem;
 import com.ddschool.utils.PublicWay;
 import com.ddschool.utils.Res;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NoticeAddActivity extends BaseUserActivity {
 
@@ -64,12 +69,33 @@ public class NoticeAddActivity extends BaseUserActivity {
     }
 
     public void Init() {
-
-        btnCancle=(Button)findViewById(R.id.title_btn_left);
+        btnPublish = (Button) findViewById(R.id.title_btn_right);
+        btnPublish.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Bimp.tempSelectBitmap.size() > 0) {
+                    for (int i = 0; i < Bimp.tempSelectBitmap.size(); i++) {
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("sn", String.valueOf(i));
+                        map.put("type", "image");
+                        map.put("access_token", access_token);
+                        Map<String, File> fileMap = new HashMap<String, File>();
+                        fileMap.put(Bimp.tempSelectBitmap.get(i).getImageId(), new File(Bimp.tempSelectBitmap.get(i).getImagePath()));
+                        Log.i(map.toString(), fileMap.toString());
+                        try {
+                            FileHelper.post("http://schoolapi2.wo-ish.com/media/upload", map, fileMap);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+        btnCancle = (Button) findViewById(R.id.title_btn_left);
         btnCancle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(NoticeAddActivity.this,NoticeActivity.class);
+                Intent intent = new Intent(NoticeAddActivity.this, NoticeActivity.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.slide_in_left,
