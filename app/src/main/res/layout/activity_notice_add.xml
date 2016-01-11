@@ -51,28 +51,38 @@
         android:layout_height="0.5dp"
         android:layout_below="@id/title_bar"
         android:background="@color/devide_line" />
+
     <EditText
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="90dp"
         android:layout_below="@id/line"
-        android:inputType="textMultiLine"
-        android:gravity="left|top"
-        android:minLines="3"
-        android:text="sssss"
         android:autoText="true"
         android:editable="true"
-        android:focusable="true"/>
+        android:focusable="true"
+        android:gravity="left|top"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:text="sssss" />
+
     <GridView
         android:id="@+id/pic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/title"
-        android:numColumns="4"/>
+        android:numColumns="4" />
+
     <View
         android:id="@+id/picline"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_below="@id/pic"
         android:background="@color/devide_line" />
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/picline" />
+
 </RelativeLayout>

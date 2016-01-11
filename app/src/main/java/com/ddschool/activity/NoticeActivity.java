@@ -7,8 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,28 +46,32 @@ public class NoticeActivity extends BaseUserActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice);
 
-        btnBack=(Button)findViewById(R.id.notice_btn_back);
+        btnBack = (Button) findViewById(R.id.notice_btn_back);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent();
-                intent.setClass(NoticeActivity.this,MainActivity.class);
+                Intent intent = new Intent();
+                intent.setClass(NoticeActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.slide_in_left,
                         R.anim.slide_out_right);
             }
         });
-        btnAdd=(ImageButton)findViewById(R.id.notice_btn_add);
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent();
-                intent.setClass(NoticeActivity.this,NoticeAddActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+        btnAdd = (ImageButton) findViewById(R.id.notice_btn_add);
+        if (userInfo.getRid() == 11 || userInfo.getRid() == 13) {
+            btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setClass(NoticeActivity.this, NoticeAddActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        } else {
+            btnAdd.setVisibility(View.GONE);
+        }
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         for (int i = 0; i < 2; i++) {
