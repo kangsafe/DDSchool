@@ -32,18 +32,15 @@
                 android:textColor="@color/blue"
                 android:textSize="16sp" />
 
-
-            <Button
+            <ImageButton
                 android:id="@+id/notice_btn_add"
                 android:layout_width="60dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                android:background="@mipmap/circle_vote_add"
-                android:text="+"
-                android:textColor="@color/blue"
-                android:textSize="25sp" />
+                android:background="@color/common_title"
+                android:src="@mipmap/circle_vote_add" />
 
             <LinearLayout
                 android:id="@+id/common_constact"

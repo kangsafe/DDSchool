@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.ddschool.R;
@@ -40,7 +41,7 @@ public class NoticeActivity extends BaseUserActivity {
     private ViewPager mViewPager;
 
     private Button btnBack;
-    private Button btnAdd;
+    private ImageButton btnAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class NoticeActivity extends BaseUserActivity {
                         R.anim.slide_out_right);
             }
         });
-        btnAdd=(Button)findViewById(R.id.notice_btn_add);
+        btnAdd=(ImageButton)findViewById(R.id.notice_btn_add);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
