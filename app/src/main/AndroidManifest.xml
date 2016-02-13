@@ -193,7 +193,8 @@
             android:value="XxK9mWcqjEWnWy48/0tDRg" />
 
         <activity android:name=".activity.BaseActivity" />
-        <activity android:name=".activity.NoticeDetailActivity"></activity>
+        <activity android:name=".activity.NoticeDetailActivity" />
+        <activity android:name=".activity.Main2Activity"></activity>
     </application>
 
 </manifest>
