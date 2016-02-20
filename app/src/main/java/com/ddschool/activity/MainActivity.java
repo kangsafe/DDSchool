@@ -133,6 +133,16 @@ public class MainActivity extends BaseUserActivity
                 setButton(v);
             }
         });
+        btnSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,UpdateAppActivity.class);
+                startActivity(intent);
+                MainActivity.this.finish();
+                setTitle("版本检测");
+                setButton(v);
+            }
+        });
         btnSchool.performClick();
 
         mPopupWindow = new PopupWindow(mPopView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
@@ -218,6 +228,7 @@ public class MainActivity extends BaseUserActivity
             case R.id.nav_share:
                 break;
             case R.id.nav_send:
+
                 break;
             default:
 //                fragment = new SchoolFragment();

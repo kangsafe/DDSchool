@@ -7,11 +7,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.ddschool.R;
+import com.ddschool.networks.UpdateInfo;
+import com.ddschool.utils.UpdateAppUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import com.ddschool.utils.UpdateAppUtils;
-import com.ddschool.networks.UpdateInfo;
 
 public class UpdateAppActivity extends AppCompatActivity {
 
@@ -20,7 +20,8 @@ public class UpdateAppActivity extends AppCompatActivity {
     private static final String INFO_NAME = "计步器";
     private static final String STORE_APK = "chunyu_apk";
 
-    @Bind(R.id.main_b_install_apk) Button mBInstallApk;
+    @Bind(R.id.main_b_install_apk)
+    Button mBInstallApk;
 
     private UpdateAppUtils.UpdateCallback mUpdateCallback; // 更新回调
 
@@ -31,18 +32,21 @@ public class UpdateAppActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         mUpdateCallback = new UpdateAppUtils.UpdateCallback() {
-            @Override public void onSuccess(UpdateInfo updateInfo) {
+            @Override
+            public void onSuccess(UpdateInfo updateInfo) {
                 Toast.makeText(UpdateAppActivity.this, "有更新", Toast.LENGTH_SHORT).show();
                 UpdateAppUtils.downloadApk(UpdateAppActivity.this, updateInfo, INFO_NAME, STORE_APK);
             }
 
-            @Override public void onError() {
+            @Override
+            public void onError() {
                 Toast.makeText(UpdateAppActivity.this, "无更新", Toast.LENGTH_SHORT).show();
             }
         };
 
         mBInstallApk.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 UpdateAppUtils.checkUpdate(APP_NAME, VERSION, mUpdateCallback);
             }
         });

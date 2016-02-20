@@ -3,26 +3,26 @@ package com.ddschool.utils;
 import java.util.Random;
 
 /**
- * Ëæ»úÉú³ÉÆ÷
+ * éšæœºç”Ÿæˆå™¨
  * <p/>
  * Created by wangchenlong on 16/1/24.
  */
 public class RandomGenerator {
     private static final Random RANDOM = new Random();
 
-    // Çø¼äËæ»ú
+    // åŒºé—´éšæœº
     public float getRandom(float lower, float upper) {
         float min = Math.min(lower, upper);
         float max = Math.max(lower, upper);
         return getRandom(max - min) + min;
     }
 
-    // ÉÏ½çËæ»ú
+    // ä¸Šç•Œéšæœº
     public float getRandom(float upper) {
         return RANDOM.nextFloat() * upper;
     }
 
-    // ÉÏ½çËæ»ú
+    // ä¸Šç•Œéšæœº
     public int getRandom(int upper) {
         return RANDOM.nextInt(upper);
     }

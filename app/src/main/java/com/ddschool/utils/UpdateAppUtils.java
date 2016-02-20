@@ -12,12 +12,13 @@ import android.util.Log;
 import com.ddschool.networks.ServiceFactory;
 import com.ddschool.networks.UpdateInfo;
 import com.ddschool.networks.UpdateService;
+import com.ddschool.utils.PrefsConsts;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * ¸üĞÂ¹ÜÀíÆ÷
- * <p/>
+ * æ›´æ–°ç®¡ç†
+ * <p>
  * Created by wangchenlong on 16/1/6.
  */
 @SuppressWarnings("unused")
@@ -27,7 +28,7 @@ public class UpdateAppUtils {
     private static final String TAG = "DEBUG-WCL: " + UpdateAppUtils.class.getSimpleName();
 
     /**
-     * ¼ì²é¸üĞÂ
+     * æ£€æµ‹æ›´æ–°
      */
     @SuppressWarnings("unused")
     public static void checkUpdate(String appCode, String curVersion, UpdateCallback updateCallback) {
@@ -37,34 +38,34 @@ public class UpdateAppUtils {
         updateService.getUpdateInfo(appCode, curVersion)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(updateInfo->onNext(updateInfo, updateCallback),
+                .subscribe(updateInfo -> onNext(updateInfo, updateCallback),
                         throwable -> onError(throwable, updateCallback));
     }
 
-    // ÏÔÊ¾ĞÅÏ¢
+    // æ˜¾ç¤ºä¿¡æ¯
     private static void onNext(UpdateInfo updateInfo, UpdateCallback updateCallback) {
-        Log.e(TAG, "·µ»ØÊı¾İ: " + updateInfo.toString());
+        Log.e(TAG, "è¿”å›æ•°æ®: " + updateInfo.toString());
         if (updateInfo.error_code != 0 || updateInfo.data == null ||
                 updateInfo.data.appURL == null) {
-            updateCallback.onError(); // Ê§°Ü
+            updateCallback.onError(); // å¤±è´¥
         } else {
             updateCallback.onSuccess(updateInfo);
         }
     }
 
-    // ´íÎóĞÅÏ¢
+    // é”™è¯¯ä¿¡æ¯
     private static void onError(Throwable throwable, UpdateCallback updateCallback) {
         updateCallback.onError();
     }
 
     /**
-     * ÏÂÔØApk, ²¢ÉèÖÃApkµØÖ·,
-     * Ä¬ÈÏÎ»ÖÃ: /storage/sdcard0/Download
+     * ä¸‹è½½Apk, å¹¶è®¾ç½®Apkçš„åœ°å€ï¼Œ
+     * é»˜è®¤ä½ç½®: /storage/sdcard0/Download
      *
-     * @param context    ÉÏÏÂÎÄ
-     * @param updateInfo ¸üĞÂĞÅÏ¢
-     * @param infoName   Í¨ÖªÃû³Æ
-     * @param storeApk   ´æ´¢µÄApk
+     * @param context    ä¸Šä¸‹æ–‡
+     * @param updateInfo æ›´æ–°ä¿¡æ¯
+     * @param infoName   é€šçŸ¥åç§°
+     * @param storeApk   å­˜å‚¨çš„Apk
      */
     @SuppressWarnings("unused")
     public static void downloadApk(
@@ -79,14 +80,14 @@ public class UpdateAppUtils {
         String appUrl = updateInfo.data.appURL;
 
         if (appUrl == null || appUrl.isEmpty()) {
-            Log.e(TAG, "ÇëÌîĞ´\"AppÏÂÔØµØÖ·\"");
+            Log.e(TAG, "ç‰ˆæœ¬æ£€æµ‹åœ°å€ä¸ºç©º");
             return;
         }
 
-        appUrl = appUrl.trim(); // È¥µôÊ×Î²¿Õ¸ñ
+        appUrl = appUrl.trim(); // å»æ‰é¦–å°¾ç©ºæ ¼
 
         if (!appUrl.startsWith("http")) {
-            appUrl = "http://" + appUrl; // Ìí¼ÓHttpĞÅÏ¢
+            appUrl = "http://" + appUrl; // æ·»åŠ httpä¿¡æ¯
         }
 
         Log.e(TAG, "appUrl: " + appUrl);
@@ -110,17 +111,17 @@ public class UpdateAppUtils {
         DownloadManager manager = (DownloadManager)
                 appContext.getSystemService(Context.DOWNLOAD_SERVICE);
 
-        // ´æ´¢ÏÂÔØKey
+        // å­˜å‚¨ä¸‹è½½Key
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(appContext);
         sp.edit().putLong(PrefsConsts.DOWNLOAD_APK_ID_PREFS, manager.enqueue(request)).apply();
     }
 
-    // ×îĞ¡°æ±¾ºÅ´óÓÚ9
+    // ç³»ç»Ÿç‰ˆæœ¬å·å¤§äº9
     private static boolean isDownloadManagerAvailable() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD;
     }
 
-    // ´íÎó»Øµ÷
+    // é”™è¯¯å›è°ƒ
     public interface UpdateCallback {
         void onSuccess(UpdateInfo updateInfo);
 

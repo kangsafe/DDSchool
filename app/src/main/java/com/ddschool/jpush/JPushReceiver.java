@@ -123,6 +123,13 @@ public class JPushReceiver extends BroadcastReceiver {
 		try {
 			JSONObject extrasJson = new JSONObject(extras);
 			myValue = extrasJson.optString("module");
+			String ext=extrasJson.optString("ext");
+			if(ext!=null && !ext.isEmpty()) {
+				Intent intent = new Intent();
+				intent.setClassName(context, ext);
+				intent.putExtras(bundle);
+				context.startActivity(intent);
+			}
 		} catch (Exception e) {
 			Log.w(TAG, "Unexpected: extras is not a valid json", e);
 			return;

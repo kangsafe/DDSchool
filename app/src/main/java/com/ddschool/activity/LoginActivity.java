@@ -49,7 +49,7 @@ import cn.jpush.android.api.TagAliasCallback;
 
 //import com.imsdk.imdeveloper.app.IMApplication;
 
-public class LoginActivity extends BaseActivity implements OnClickListener {
+public class LoginActivity extends BaseSuperActivity implements OnClickListener {
     private static final String TAG = "LoginActivity";
 
     private EditText mUserNameEditText; // 帐号编辑框
